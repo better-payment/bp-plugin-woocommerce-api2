@@ -19,10 +19,7 @@
 
 //defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) :
-	/**
-	 * Integration demo class.
-	 */
+if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 	class WC_BetterPayment_Plugin {
 		/**
 		 * Construct the plugin.
@@ -30,16 +27,10 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) :
 		public function __construct() {
 			// Checks if WooCommerce is installed.
 			add_action('admin_notices', function () {
-				if (!is_plugin_active('woocommerce/woocommerce.php')) {
+				if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 					echo "<div class='notice notice-error'><p>Better Payment WooCommerce Extension requires Woocommerce plugin to be activated</p></div>";
 				}
 			});
-
-			add_action( 'before_woocommerce_init', function() {
-				if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
-					\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, false );
-				}
-			} );
 
 			add_action( 'plugins_loaded', array( $this, 'init' ) );
 		}
@@ -49,7 +40,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) :
 		 */
 		public function init() {
 			// Include our integration class.
-			include_once 'src/config-integration.php';
+			include_once 'includes/integrations/config.php';
 			// Register the integration.
 			add_filter( 'woocommerce_integrations', array( $this, 'add_integration' ) );
 
@@ -76,11 +67,11 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) :
 		 * @param Array of methods.
 		 */
 		public function add_better_payment_gateway_methods($methods) {
-			$methods[] = 'WC_Better_Payment_Credit_Card';
-			$methods[] = 'WC_Better_Payment_PayPal';
+			$methods[] = 'WC_BetterPayment_Credit_Card';
+			$methods[] = 'WC_BetterPayment_PayPal';
 			return $methods;
 		}
 	}
-endif;
+}
 
-$WC_BetterPayment_Plugin = new WC_BetterPayment_Plugin( __FILE__ );
+$WC_BetterPayment_Plugin = new WC_BetterPayment_Plugin();

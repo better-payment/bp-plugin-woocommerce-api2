@@ -7,7 +7,7 @@ if (class_exists('WC_Integration')) {
 		public function __construct() {
 			global $woocommerce;
 
-			$this->id           = 'integration-demo';
+			$this->id           = 'betterpayment';
 			$this->method_title = __( 'Better Payment' );
 //			$this->method_description = __( 'Base configuration');
 
@@ -20,10 +20,7 @@ if (class_exists('WC_Integration')) {
 //			$this->debug   = $this->get_option( 'debug' );
 
 			// Actions.
-			add_action( 'woocommerce_update_options_integration_' . $this->id, array(
-				$this,
-				'process_admin_options'
-			) );
+			add_action('woocommerce_update_options_integration_' . $this->id, array($this, 'process_admin_options'));
 		}
 
 		/**
