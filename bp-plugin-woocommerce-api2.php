@@ -3,7 +3,7 @@
  * Plugin Name: Better Payment WooCommerce Extension
  * Plugin URI: https://github.com/better-payment/bp-plugin-woocommerce-api2
  * Description: Better Payment plugin to implement payment methods using API2
- * Version: 1.0.1
+ * Version: 1.0.0
  * Author: Better Payment
  * Author URI: https://betterpayment.de
  * Developer: Your Name
@@ -45,10 +45,11 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			add_filter( 'woocommerce_integrations', array( $this, 'add_integration' ) );
 
 			// Include payment methods
-			include_once 'payment-methods/credit-card.php';
-			include_once 'payment-methods/paypal.php';
+			include_once 'includes/payment-gateways/credit-card.php';
+			include_once 'includes/payment-gateways/paypal.php';
+			include_once 'includes/payment-gateways/sepa-direct-debit.php';
 			// Register payment methods
-			add_filter('woocommerce_payment_gateways', array($this, 'add_better_payment_gateway_methods'));
+			add_filter('woocommerce_payment_gateways', array($this, 'add_betterpayment_gateways'));
 		}
 
 		/**
@@ -66,9 +67,11 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 		 *
 		 * @param Array of methods.
 		 */
-		public function add_better_payment_gateway_methods($methods) {
+		public function add_betterpayment_gateways($methods) {
 			$methods[] = 'WC_BetterPayment_Credit_Card';
 			$methods[] = 'WC_BetterPayment_PayPal';
+			$methods[] = 'WC_BetterPayment_Sepa_Direct_Debit';
+
 			return $methods;
 		}
 	}

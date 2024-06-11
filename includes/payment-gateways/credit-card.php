@@ -1,9 +1,9 @@
 <?php
-include_once 'abstract-better-payment-gateway.php';
+include_once 'abstract-betterpayment-gateway.php';
 
 if (class_exists('WC_BetterPayment_Gateway')) {
 	class WC_BetterPayment_Credit_Card extends WC_BetterPayment_Gateway {
-		public string $shortcode = 'cc';
+		protected string $shortcode = 'cc';
 
 		public function __construct() {
 			$this->id = 'betterpayment_cc';
@@ -15,8 +15,8 @@ if (class_exists('WC_BetterPayment_Gateway')) {
 			$this->init_form_fields();
 			$this->init_settings();
 
-//			$this->enabled = $this->get_option('enabled');
-//			$this->title = $this->get_option('title');
+			$this->enabled = $this->get_option('enabled');
+			$this->title = $this->get_option('title');
 
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		}
@@ -43,6 +43,8 @@ if (class_exists('WC_BetterPayment_Gateway')) {
 			$parameters += $this->get_billing_address_parameters($order_id);
 			$parameters += $this->get_shipping_address_parameters($order_id);
 			$parameters += $this->get_redirect_url_parameters();
+
+			error_log(print_r($parameters, true));
 
 //			$order->update_status('pending-payment', 'Awaiting Credit Card payment');
 

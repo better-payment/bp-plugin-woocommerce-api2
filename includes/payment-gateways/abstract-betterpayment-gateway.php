@@ -1,4 +1,5 @@
 <?php
+include_once plugin_dir_path( __FILE__ ) . '../helpers/config-reader.php';
 
 if (class_exists('WC_Payment_Gateway')) {
 	abstract class WC_BetterPayment_Gateway extends WC_Payment_Gateway {
@@ -6,7 +7,6 @@ if (class_exists('WC_Payment_Gateway')) {
 
 		protected function get_common_parameters($order_id): array
 		{
-			global $woocommerce;
 			$order = wc_get_order($order_id);
 
 			return [
@@ -21,7 +21,7 @@ if (class_exists('WC_Payment_Gateway')) {
 				// Any alphanumeric string to provide the customer number of a Merchant’s order (up to 40 characters) for factoring or debt collection
 				'customer_id' => $order->get_customer_id(),
 				// See details about merchant reference - https://testdashboard.betterpayment.de/docs/#merchant-reference
-				'merchant_reference' => $order->get_order_number() . ' - ' . 'my store name', // TODO: fetch dynamically
+				'merchant_reference' => $order->get_order_number() . ' - ' . get_bloginfo('name'),
 				// Including possible shipping costs and VAT (float number)
 				'amount' => $order->get_total(),
 				// Should be set if the order includes any shipping costs (float number)
@@ -36,8 +36,8 @@ if (class_exists('WC_Payment_Gateway')) {
 				// use substr to convert en_US to en
 				'locale' => 'en', // TODO: fetch dynamically
 				// module/plugin metadata
-				'app_name' => 'WooCommerce',
-				'app_version' => 'WooCommerce ' . $woocommerce->version . ', Plugin ' . $this->get_plugin_version()
+				'app_name' => Config_Reader::get_app_name(),
+				'app_version' => Config_Reader::get_app_version(),
 			];
 		}
 
@@ -57,7 +57,7 @@ if (class_exists('WC_Payment_Gateway')) {
 				// The county, state or region of the billing address
 				'state' => $order->get_billing_state(),
 				// Country Code in ISO 3166-1
-				'country' => $order->get_billing_country(), // TODO: check if it is ISO code
+				'country' => $order->get_billing_country(),
 				// Customer’s first name
 				'first_name' => $order->get_billing_first_name(),
 				// Customer’s last name
@@ -87,7 +87,7 @@ if (class_exists('WC_Payment_Gateway')) {
 				// The county, state or region of the shipping address
 				'shipping_state' => $order->get_shipping_state(),
 				// Country Code in ISO 3166-1 alpha2
-				'shipping_country' => $order->get_shipping_country(), // TODO: check if it is ISO code
+				'shipping_country' => $order->get_shipping_country(),
 				// Customer’s first name
 				'shipping_first_name' => $order->get_shipping_first_name(),
 				// Customer’s last name
@@ -142,38 +142,6 @@ if (class_exists('WC_Payment_Gateway')) {
 				// add other payment method specific additional data here
 				default => [],
 			};
-		}
-
-		private function get_plugin_version() {
-			require_once(ABSPATH . 'wp-admin/includes/plugin.php');
-			$plugin_file = 'wp-content/plugins/bp-plugin-woocommerce-api2/bp-plugin-woocommerce-api2.php';
-			$plugin_data = get_plugin_data($plugin_file);
-
-			return $plugin_data['Version'];
-		}
-
-		public function get_api_url() {
-			$settings = get_option('woocommerce_betterpayment_settings');
-
-			return $settings['environment'] == 'test' ? $settings['testAPIUrl'] : $settings['productionAPIUrl'];
-		}
-
-		public function get_api_key() {
-			$settings = get_option('woocommerce_betterpayment_settings');
-
-			return $settings['environment'] == 'test' ? $settings['testAPIKey'] : $settings['productionAPIKey'];
-		}
-
-		public function get_outgoing_key() {
-			$settings = get_option('woocommerce_betterpayment_settings');
-
-			return $settings['environment'] == 'test' ? $settings['testOutgoingKey'] : $settings['productionOutgoingKey'];
-		}
-
-		public function get_incoming_key() {
-			$settings = get_option('woocommerce_betterpayment_settings');
-
-			return $settings['environment'] == 'test' ? $settings['testIncomingKey'] : $settings['productionIncomingKey'];
 		}
 
 	}

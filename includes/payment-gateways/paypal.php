@@ -1,5 +1,5 @@
 <?php
-include_once 'abstract-better-payment-gateway.php';
+include_once 'abstract-betterpayment-gateway.php';
 
 if (class_exists('WC_Payment_Gateway')) {
 	class WC_BetterPayment_PayPal extends WC_BetterPayment_Gateway {
