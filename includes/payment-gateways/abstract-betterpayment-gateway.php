@@ -2,7 +2,7 @@
 include_once plugin_dir_path( __FILE__ ) . '../helpers/config-reader.php';
 
 if (class_exists('WC_Payment_Gateway')) {
-	abstract class WC_BetterPayment_Gateway extends WC_Payment_Gateway {
+	abstract class Abstract_BetterPayment_Gateway extends WC_Payment_Gateway {
 		protected string $shortcode;
 
 		protected function get_common_parameters($order_id): array
@@ -117,32 +117,37 @@ if (class_exists('WC_Payment_Gateway')) {
 			];
 		}
 
-		protected function get_risk_check_parameters($order_id): array
+		protected function get_risk_check_parameters(): array
 		{
-			$order = wc_get_order($order_id);
-			$customer_id = $order->get_customer_id();
+			$parameters = [];
 
-			// TODO: fetch dynamically
-			return [
-				'date_of_birth' => '2000-01-01',
-				'gender' => 'm'
-			];
+			if (!empty($_POST['date_of_birth'])) {
+				$parameters += [
+					'date_of_birth' => $_POST['date_of_birth']
+				];
+			}
+
+			if (!empty($_POST['gender'])) {
+				$parameters += [
+					'gender' => $_POST['gender']
+				];
+			}
+
+			return $parameters;
 		}
 
 		protected function get_additional_parameters(): array
 		{
-			// TODO: fetch additional parameters from payment specific form in checkout page
 			return match ($this->shortcode) {
-				'sepa', 'sepa_b2b' => [
-					'account_holder' => '',
-					'iban' => '',
-					'bic' => '',
-					'sepa_mandate' => '',
+				'dd', 'dd_b2b' => [
+					'account_holder' => $_POST['account_holder'],
+					'iban' => $_POST['iban'],
+					'bic' => $_POST['bic'],
+					'sepa_mandate' => $_POST['mandate_reference'],
 				],
 				// add other payment method specific additional data here
 				default => [],
 			};
 		}
-
 	}
 }

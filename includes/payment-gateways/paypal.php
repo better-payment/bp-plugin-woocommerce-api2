@@ -1,8 +1,8 @@
 <?php
-include_once 'abstract-betterpayment-gateway.php';
+include_once 'abstract-async-betterpayment-gateway.php';
 
-if (class_exists('WC_Payment_Gateway')) {
-	class WC_BetterPayment_PayPal extends WC_BetterPayment_Gateway {
+if (class_exists( 'Abstract_Async_BetterPayment_Gateway' )) {
+	class BetterPayment_PayPal extends Abstract_Async_BetterPayment_Gateway {
 		public function __construct() {
 			$this->id = 'betterpayment_paypal';
 			$this->icon = '';
@@ -33,15 +33,5 @@ if (class_exists('WC_Payment_Gateway')) {
 				]
 			];
 		}
-
-//		public function process_payment( $order_id ) {
-//			$order = wc_get_order($order_id);
-//			$order->update_status('pending-payment', 'Awaiting Credit Card payment');
-//
-//			return [
-//				'result' => 'success',
-//				'redirect' => $this->get_return_url($order)
-//			];
-//		}
 	}
 }

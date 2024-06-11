@@ -68,9 +68,9 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 		 * @param Array of methods.
 		 */
 		public function add_betterpayment_gateways($methods) {
-			$methods[] = 'WC_BetterPayment_Credit_Card';
-			$methods[] = 'WC_BetterPayment_PayPal';
-			$methods[] = 'WC_BetterPayment_Sepa_Direct_Debit';
+			$methods[] = 'BetterPayment_Credit_Card';
+			$methods[] = 'BetterPayment_PayPal';
+			$methods[] = 'BetterPayment_Sepa_Direct_Debit';
 
 			return $methods;
 		}

@@ -1,8 +1,8 @@
 <?php
-include_once 'abstract-betterpayment-gateway.php';
+include_once 'abstract-sync-betterpayment-gateway.php';
 
-if (class_exists('WC_BetterPayment_Gateway')) {
-	class WC_BetterPayment_Sepa_Direct_Debit extends WC_BetterPayment_Gateway {
+if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
+	class BetterPayment_Sepa_Direct_Debit extends Abstract_Sync_BetterPayment_Gateway {
 		protected string $shortcode = 'dd';
 
 		public function __construct() {
@@ -33,29 +33,29 @@ if (class_exists('WC_BetterPayment_Gateway')) {
 					'type' => 'text',
 					'default' => 'Sepa Direct Debit (Better Payment)',
 				],
-				'creditorId' => [
+				'creditor_id' => [
 					'title' => 'Creditor ID',
 					'type' => 'text',
 					'description' => 'You need to provide a valid Creditor ID, to be shown in mandate agreement on the checkout page.',
 				],
-				'companyName' => [
+				'company_name' => [
 					'title' => 'Company name',
 					'type' => 'text',
 					'description' => 'You need to provide Company Name, to be shown in mandate reference agreement on the checkout page.',
 				],
-				'collectDateOfBirth' => [
+				'collect_date_of_birth' => [
 					'title' => 'Collect date of birth',
 					'type' => 'checkbox',
 					'default' => false,
 					'description' => 'If you have configured risk checks with the payment provider, it may require date of birth from your customers.',
 				],
-				'collectGender' => [
+				'collect_gender' => [
 					'title' => 'Collect gender information',
 					'type' => 'checkbox',
 					'default' => false,
 					'description' => 'If you have configured risk checks with the payment provider, it may require gender from your customers.'
 				],
-				'riskCheckAgreement' => [
+				'risk_check_agreement' => [
 					'title' => 'Require customers to agree to risk check processing',
 					'type' => 'checkbox',
 					'default' => false,
@@ -63,6 +63,18 @@ if (class_exists('WC_BetterPayment_Gateway')) {
 									Without agreement, payments will not go through. You can turn this field off, in case you provide it as part of your terms and conditions.',
 				]
 			];
+		}
+
+		private function is_date_of_birth_collected(): bool {
+			return get_option('woocommerce_betterpayment_dd_settings')['collect_date_of_birth'] == 'yes';
+		}
+
+		private function is_gender_collected(): bool {
+			return get_option('woocommerce_betterpayment_dd_settings')['collect_gender'] == 'yes';
+		}
+
+		private function is_risk_check_agreement_required(): bool {
+			return get_option('woocommerce_betterpayment_dd_settings')['risk_check_agreement'] == 'yes';
 		}
 
 		public function payment_fields() {
@@ -78,8 +90,8 @@ if (class_exists('WC_BetterPayment_Gateway')) {
 			]);
 
 			$account_holder = wp_get_current_user()->first_name . ' ' . wp_get_current_user()->last_name;
-			$creditor_id = get_option('woocommerce_betterpayment_dd_settings')['creditorId'];
-			$company_name = get_option('woocommerce_betterpayment_dd_settings')['companyName'];
+			$creditor_id = get_option('woocommerce_betterpayment_dd_settings')['creditor_id'];
+			$company_name = get_option('woocommerce_betterpayment_dd_settings')['company_name'];
 			$mandate_reference = wp_generate_uuid4();
 
 			$html = '<b>Account holder: </b>' . $account_holder;
@@ -99,24 +111,42 @@ if (class_exists('WC_BetterPayment_Gateway')) {
 
 			echo wpautop( wptexturize( $html ) );
 
-			woocommerce_form_field('mandateAgreement', [
+			woocommerce_form_field('account_holder', [
+				'type' => 'hidden',
+				'default' => $account_holder,
+			]);
+
+			woocommerce_form_field('mandate_reference', [
+				'type' => 'hidden',
+				'default' => $mandate_reference,
+			]);
+
+			woocommerce_form_field('mandate_agreement', [
 				'type' => 'checkbox',
 				'label' => __('I agree to the following mandate'),
 				'required' => true,
 			]);
 
-			if (get_option('woocommerce_betterpayment_dd_settings')['collectDateOfBirth'] == 'yes') {
-				woocommerce_form_field('dateOfBirth', [
+			// Risk check information
+			if ($this->is_date_of_birth_collected() || $this->is_gender_collected() || $this->is_risk_check_agreement_required()) {
+				$html = '<hr>';
+				$html .= 'Risk check information';
+				echo wpautop( wptexturize( $html ) );
+			}
+
+			if ($this->is_date_of_birth_collected()) {
+				woocommerce_form_field('date_of_birth', [
 					'type' => 'date',
 					'required' => true,
 					'label' => __('Date of birth'),
 				]);
 			}
 
-			if (get_option('woocommerce_betterpayment_dd_settings')['collectGender'] == 'yes') {
+			if ($this->is_gender_collected()) {
 				woocommerce_form_field('gender', [
 					'type' => 'select',
 					'options' => [
+						'' => __('Select...'),
 						'm' => 'Male',
 						'f' => 'Female',
 						'd' => 'Diverse'
@@ -126,28 +156,35 @@ if (class_exists('WC_BetterPayment_Gateway')) {
 				]);
 			}
 
-			if (get_option('woocommerce_betterpayment_dd_settings')['riskCheckAgreement'] == 'yes') {
-				woocommerce_form_field('riskCheckAgreement', [
+			if ($this->is_risk_check_agreement_required()) {
+				woocommerce_form_field('risk_check_agreement', [
 					'type' => 'checkbox',
 					'label' => __('Agree to risk check processing'),
+					'required' => true,
 				]);
 			}
 		}
 
-		public function process_payment( $order_id ) {
-			$order = wc_get_order($order_id);
-			$parameters = [];
-			$parameters += $this->get_common_parameters($order_id);
-			$parameters += $this->get_billing_address_parameters($order_id);
-			$parameters += $this->get_shipping_address_parameters($order_id);
-			$parameters += $this->get_redirect_url_parameters();
+		public function validate_fields() {
+			if( empty($_POST['iban']) ) {
+				wc_add_notice( 'IBAN is required', 'error' );
+			}
 
-//			$order->update_status('pending-payment', 'Awaiting Credit Card payment');
+			if ( empty($_POST['mandate_agreement']) ) {
+				wc_add_notice( 'Mandate agreement is required', 'error' );
+			}
 
-			return [
-				'result' => 'success',
-				'redirect' => $this->get_return_url($order)
-			];
+			if ( $this->is_date_of_birth_collected() && empty($_POST['date_of_birth']) ) {
+				wc_add_notice( 'Date of birth is required', 'error' );
+			}
+
+			if ( $this->is_gender_collected() && empty($_POST['gender']) ) {
+				wc_add_notice( 'Gender is required', 'error' );
+			}
+
+			if ( $this->is_risk_check_agreement_required() && empty($_POST['risk_check_agreement']) ) {
+				wc_add_notice( 'Risk check agreement is required', 'error' );
+			}
 		}
 	}
 }
