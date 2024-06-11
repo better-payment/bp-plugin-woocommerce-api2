@@ -3,6 +3,8 @@ include_once 'abstract-async-betterpayment-gateway.php';
 
 if (class_exists( 'Abstract_Async_BetterPayment_Gateway' )) {
 	class BetterPayment_PayPal extends Abstract_Async_BetterPayment_Gateway {
+		protected string $shortcode = 'paypal';
+
 		public function __construct() {
 			$this->id = 'betterpayment_paypal';
 			$this->icon = '';
