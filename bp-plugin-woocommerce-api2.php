@@ -40,7 +40,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 		 */
 		public function init() {
 			// Include our integration class.
-			include_once 'includes/integrations/config.php';
+			include_once 'includes/integration.php';
 			// Register the integration.
 			add_filter( 'woocommerce_integrations', array( $this, 'add_integration' ) );
 
@@ -50,6 +50,9 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			include_once 'includes/payment-gateways/sepa-direct-debit.php';
 			// Register payment methods
 			add_filter('woocommerce_payment_gateways', array($this, 'add_betterpayment_gateways'));
+
+			// Include webhook route endpoint
+			include_once 'includes/webhook.php';
 		}
 
 		/**
@@ -58,7 +61,8 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 		 * @param Array of integrations.
 		 */
 		public function add_integration($integrations) {
-			$integrations[] = 'WC_BetterPayment_Plugin_Integration';
+			$integrations[] = 'BetterPayment_Plugin_Integration';
+
 			return $integrations;
 		}
 

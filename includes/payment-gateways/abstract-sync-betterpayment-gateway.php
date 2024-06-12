@@ -31,6 +31,7 @@ if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
 				$responseBody = json_decode( wp_remote_retrieve_body( $response ), true );
 
 				if ($responseBody['error_code'] == 0) {
+					// TODO: Update to corresponding status received from response ?
 					$order->update_status('on-hold', 'Awaiting payment confirmation.');
 
 					$order->set_transaction_id($responseBody['transaction_id']);

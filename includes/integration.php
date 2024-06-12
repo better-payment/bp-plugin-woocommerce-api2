@@ -1,6 +1,6 @@
 <?php
 if (class_exists('WC_Integration')) {
-	class WC_BetterPayment_Plugin_Integration extends WC_Integration {
+	class BetterPayment_Plugin_Integration extends WC_Integration {
 		/**
 		 * Init and hook in the integration.
 		 */
