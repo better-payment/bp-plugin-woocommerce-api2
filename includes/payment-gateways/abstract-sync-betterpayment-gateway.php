@@ -1,6 +1,5 @@
 <?php
 include_once 'abstract-betterpayment-gateway.php';
-include_once plugin_dir_path( __FILE__ ) . '../helpers/config-reader.php';
 
 if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
 	abstract class Abstract_Sync_BetterPayment_Gateway extends Abstract_BetterPayment_Gateway {

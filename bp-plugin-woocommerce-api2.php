@@ -51,6 +51,10 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			// Register payment methods
 			add_filter('woocommerce_payment_gateways', array($this, 'add_betterpayment_gateways'));
 
+			// Include helpers
+			include_once 'includes/helpers/config-reader.php';
+			include_once 'includes/helpers/order-status-updater.php';
+
 			// Include webhook route endpoint
 			include_once 'includes/webhook.php';
 		}

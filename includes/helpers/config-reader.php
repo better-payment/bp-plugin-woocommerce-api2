@@ -19,8 +19,9 @@ class Config_Reader {
 
 	public static function get_api_url() {
 		$settings = get_option('woocommerce_betterpayment_settings');
+		$api_url = $settings['environment'] == 'test' ? $settings['testAPIUrl'] : $settings['productionAPIUrl'];
 
-		return $settings['environment'] == 'test' ? $settings['testAPIUrl'] : $settings['productionAPIUrl'];
+		return rtrim($api_url, '/');
 	}
 
 	public static function get_api_key() {

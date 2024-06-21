@@ -1,5 +1,4 @@
 <?php
-include_once plugin_dir_path( __FILE__ ) . '../helpers/config-reader.php';
 
 if (class_exists('WC_Payment_Gateway')) {
 	abstract class Abstract_BetterPayment_Gateway extends WC_Payment_Gateway {
@@ -15,7 +14,7 @@ if (class_exists('WC_Payment_Gateway')) {
 				// always enabled
 				'risk_check_approval' => '1',
 				// The URL for updates about transaction status are posted
-				'postback_url' => 'https://potback.url', // TODO: fetch dynamically
+				'postback_url' => set_url_scheme(get_rest_url(path: 'betterpayment/webhook'), 'https'),
 				// Any alphanumeric string to identify the Merchant’s order
 				'order_id' => $order->get_order_number(),
 				// Any alphanumeric string to provide the customer number of a Merchant’s order (up to 40 characters) for factoring or debt collection
@@ -95,12 +94,13 @@ if (class_exists('WC_Payment_Gateway')) {
 			];
 		}
 
-		protected function get_redirect_url_parameters(): array
+		protected function get_redirect_url_parameters($order_id): array
 		{
-			// TODO: set correctly
+			$order = wc_get_order( $order_id );
+
 			return [
-				'success_url' => 'https://redirect.successurl',
-				'error_url' => 'https://redirect.errorurl',
+				'success_url' => $order->get_checkout_order_received_url(), // or we can use $this->get_return_url($order)
+				'error_url' => $order->get_cancel_order_url(), // or we can use get_checkout_payment_url()
 			];
 		}
 

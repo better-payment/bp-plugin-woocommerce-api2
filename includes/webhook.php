@@ -1,5 +1,4 @@
 <?php
-include_once 'helpers/config-reader.php';
 
 add_action( 'rest_api_init', function () {
 	register_rest_route( 'betterpayment', 'webhook', array(
