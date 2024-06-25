@@ -5,21 +5,9 @@ if (class_exists( 'Abstract_Async_BetterPayment_Gateway' )) {
 	class BetterPayment_Credit_Card extends Abstract_Async_BetterPayment_Gateway {
 		protected string $shortcode = 'cc';
 
-		public function __construct() {
-			$this->id = 'betterpayment_cc';
-			$this->icon = '';
-			$this->has_fields = false;
-			$this->method_title = 'Credit Card (Better Payment)';
-			$this->method_description = 'Credit Card payment method of Better Payment Gateway';
-
-			$this->init_form_fields();
-			$this->init_settings();
-
-			$this->enabled = $this->get_option('enabled');
-			$this->title = $this->get_option('title');
-
-			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-		}
+		public $id = 'betterpayment_cc';
+		public $method_title = 'Credit Card (Better Payment)';
+		public $method_description = 'Credit Card payment method of Better Payment Gateway';
 
 		public function init_form_fields() {
 			$this->form_fields = [

@@ -5,21 +5,10 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 	class BetterPayment_Sepa_Direct_Debit extends Abstract_Sync_BetterPayment_Gateway {
 		protected string $shortcode = 'dd';
 
-		public function __construct() {
-			$this->id = 'betterpayment_dd';
-			$this->icon = '';
-			$this->has_fields = true;
-			$this->method_title = 'Sepa Direct Debit (Better Payment)';
-			$this->method_description = 'Sepa Direct Debit payment method of Better Payment Gateway';
-
-			$this->init_form_fields();
-			$this->init_settings();
-
-			$this->enabled = $this->get_option('enabled');
-			$this->title = $this->get_option('title');
-
-			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-		}
+		public $id = 'betterpayment_dd';
+		public $method_title = 'Sepa Direct Debit (Better Payment)';
+		public $method_description = 'Sepa Direct Debit payment method of Better Payment Gateway';
+		public $has_fields = true;
 
 		public function init_form_fields() {
 			$this->form_fields = [

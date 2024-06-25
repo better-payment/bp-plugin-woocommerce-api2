@@ -4,6 +4,16 @@ if (class_exists('WC_Payment_Gateway')) {
 	abstract class Abstract_BetterPayment_Gateway extends WC_Payment_Gateway {
 		protected string $shortcode;
 
+		public function __construct() {
+			$this->init_form_fields();
+			$this->init_settings();
+
+			$this->enabled = $this->get_option('enabled');
+			$this->title = $this->get_option('title');
+
+			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
+		}
+
 		protected function get_common_parameters($order_id): array
 		{
 			$order = wc_get_order($order_id);

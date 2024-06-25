@@ -48,12 +48,12 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			include_once 'includes/payment-gateways/credit-card.php';
 			include_once 'includes/payment-gateways/paypal.php';
 			include_once 'includes/payment-gateways/sepa-direct-debit.php';
+			include_once 'includes/payment-gateways/invoice.php';
 			// Register payment methods
 			add_filter('woocommerce_payment_gateways', array($this, 'add_betterpayment_gateways'));
 
 			// Include helpers
 			include_once 'includes/helpers/config-reader.php';
-			include_once 'includes/helpers/order-status-updater.php';
 
 			// Include webhook route endpoint
 			include_once 'includes/webhook.php';
@@ -79,6 +79,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			$methods[] = 'BetterPayment_Credit_Card';
 			$methods[] = 'BetterPayment_PayPal';
 			$methods[] = 'BetterPayment_Sepa_Direct_Debit';
+			$methods[] = 'BetterPayment_Invoice';
 
 			return $methods;
 		}
