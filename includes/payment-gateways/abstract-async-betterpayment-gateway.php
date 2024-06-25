@@ -55,8 +55,6 @@ if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
 		}
 
 		function update_order_status_on_thankyou_page( $order_id ): void {
-			error_log(print_r($order_id, true));
-
 			if ( ! $order_id ) {
 				return;
 			}

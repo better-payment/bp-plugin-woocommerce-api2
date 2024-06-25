@@ -3,6 +3,7 @@
 if (class_exists('WC_Payment_Gateway')) {
 	abstract class Abstract_BetterPayment_Gateway extends WC_Payment_Gateway {
 		protected string $shortcode;
+		protected bool $is_b2b = false;
 
 		public function __construct() {
 			$this->init_form_fields();
@@ -116,15 +117,18 @@ if (class_exists('WC_Payment_Gateway')) {
 
 		protected function get_company_parameters($order_id): array
 		{
-			$order = wc_get_order($order_id);
+			if ($this->is_b2b) {
+				$order = wc_get_order($order_id);
 
-			// TODO: to be improved as in SHOPWARE plugin company detail parameters
-			return [
-				// Company name
-				'company' => $order->get_billing_company(),
-				// Starts with ISO 3166-1 alpha2 followed by 2 to 11 characters. See more details about Vat - http://ec.europa.eu/taxation_customs/vies/
-				'company_vat_id' => '',
-			];
+				return [
+					// Company name
+					'company' => $order->get_billing_company(),
+					// Starts with ISO 3166-1 alpha2 followed by 2 to 11 characters. See more details about Vat - http://ec.europa.eu/taxation_customs/vies/
+					'company_vat_id' => '',
+				];
+			}
+
+			return [];
 		}
 
 		protected function get_risk_check_parameters(): array

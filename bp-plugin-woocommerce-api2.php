@@ -48,7 +48,9 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			include_once 'includes/payment-gateways/credit-card.php';
 			include_once 'includes/payment-gateways/paypal.php';
 			include_once 'includes/payment-gateways/sepa-direct-debit.php';
+			include_once 'includes/payment-gateways/sepa-direct-debit-b2b.php';
 			include_once 'includes/payment-gateways/invoice.php';
+			include_once 'includes/payment-gateways/invoice-b2b.php';
 			// Register payment methods
 			add_filter('woocommerce_payment_gateways', array($this, 'add_betterpayment_gateways'));
 
@@ -79,7 +81,9 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			$methods[] = 'BetterPayment_Credit_Card';
 			$methods[] = 'BetterPayment_PayPal';
 			$methods[] = 'BetterPayment_Sepa_Direct_Debit';
+			$methods[] = 'BetterPayment_Sepa_Direct_Debit_B2B';
 			$methods[] = 'BetterPayment_Invoice';
+			$methods[] = 'BetterPayment_Invoice_B2B';
 
 			return $methods;
 		}
