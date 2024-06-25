@@ -1,8 +1,8 @@
 <?php
-include_once 'abstract-sync-betterpayment-gateway.php';
+include_once 'abstract-betterpayment-gateway.php';
 
-if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
-	class BetterPayment_Invoice extends Abstract_Sync_BetterPayment_Gateway {
+if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
+	class BetterPayment_Invoice extends Abstract_BetterPayment_Gateway {
 		protected string $shortcode = 'kar';
 
 		public $id = 'betterpayment_kar';
@@ -34,7 +34,7 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 					'type' => 'text',
 					'default' => 'Invoice (Better Payment)',
 				],
-				'collect_date_of_birth' => [
+				'$this->>this->id . c_ollect_date_of_birth' => [
 					'title' => 'Collect date of birth',
 					'type' => 'checkbox',
 					'default' => false,
@@ -110,7 +110,7 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 			}
 
 			if ($this->is_date_of_birth_collected()) {
-				woocommerce_form_field('date_of_birth', [
+				woocommerce_form_field($this->id . '_date_of_birth', [
 					'type' => 'date',
 					'required' => true,
 					'label' => __('Date of birth'),
@@ -118,7 +118,7 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 			}
 
 			if ($this->is_gender_collected()) {
-				woocommerce_form_field('gender', [
+				woocommerce_form_field($this->id . '_gender', [
 					'type' => 'select',
 					'options' => [
 						'' => __('Select...'),
@@ -132,7 +132,7 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 			}
 
 			if ($this->is_risk_check_agreement_required()) {
-				woocommerce_form_field('risk_check_agreement', [
+				woocommerce_form_field($this->id . '_risk_check_agreement', [
 					'type' => 'checkbox',
 					'label' => __('Agree to risk check processing'),
 					'required' => true,
@@ -141,15 +141,15 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 		}
 
 		public function validate_fields() {
-			if ( $this->is_date_of_birth_collected() && empty($_POST['date_of_birth']) ) {
+			if ( $this->is_date_of_birth_collected() && empty($_POST[$this->id . '_date_of_birth']) ) {
 				wc_add_notice( 'Date of birth is required', 'error' );
 			}
 
-			if ( $this->is_gender_collected() && empty($_POST['gender']) ) {
+			if ( $this->is_gender_collected() && empty($_POST[$this->id . '_gender']) ) {
 				wc_add_notice( 'Gender is required', 'error' );
 			}
 
-			if ( $this->is_risk_check_agreement_required() && empty($_POST['risk_check_agreement']) ) {
+			if ( $this->is_risk_check_agreement_required() && empty($_POST[$this->id . '_risk_check_agreement']) ) {
 				wc_add_notice( 'Risk check agreement is required', 'error' );
 			}
 		}

@@ -1,9 +1,10 @@
 <?php
-include_once 'abstract-async-betterpayment-gateway.php';
+include_once 'abstract-betterpayment-gateway.php';
 
-if (class_exists( 'Abstract_Async_BetterPayment_Gateway' )) {
-	class BetterPayment_Credit_Card extends Abstract_Async_BetterPayment_Gateway {
+if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
+	class BetterPayment_Credit_Card extends Abstract_BetterPayment_Gateway {
 		protected string $shortcode = 'cc';
+		protected bool $is_async = true;
 
 		public $id = 'betterpayment_cc';
 		public $method_title = 'Credit Card (Better Payment)';

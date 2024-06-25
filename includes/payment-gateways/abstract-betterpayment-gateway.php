@@ -4,6 +4,7 @@ if (class_exists('WC_Payment_Gateway')) {
 	abstract class Abstract_BetterPayment_Gateway extends WC_Payment_Gateway {
 		protected string $shortcode;
 		protected bool $is_b2b = false;
+		protected bool $is_async = false;
 
 		public function __construct() {
 			$this->init_form_fields();
@@ -13,9 +14,151 @@ if (class_exists('WC_Payment_Gateway')) {
 			$this->title = $this->get_option('title');
 
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
+			if ($this->is_async) {
+				add_action( 'woocommerce_thankyou', array($this, 'update_order_status_on_thankyou_page'));
+			}
 		}
 
-		protected function get_common_parameters($order_id): array
+		public function update_order_status_on_thankyou_page( $order_id ): void {
+			if ( ! $order_id ) {
+				return;
+			}
+
+			$order = wc_get_order( $order_id );
+			$transaction_id = $order->get_transaction_id();
+
+			if ($transaction_id) {
+				$url = Config_Reader::get_api_url() . '/rest/transactions/' . $transaction_id;
+				$headers = [
+					'Content-Type' => 'application/json',
+					'Authorization' => 'Basic ' . base64_encode( Config_Reader::get_api_key() . ':' . Config_Reader::get_outgoing_key())
+				];
+
+				$response = wp_remote_get( $url, [
+					'headers' => $headers,
+				]);
+
+				if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+					$responseBody = json_decode( wp_remote_retrieve_body( $response ), true );
+
+					if (!isset($responseBody['error_code'])) {
+						$transaction_status = $responseBody['status'];
+
+						// Map status from Better Payment to WooCommerce
+						if ($transaction_status == 'completed') {
+							$order->payment_complete();
+						}
+						else {
+							$status = match ($transaction_status) {
+								'started', 'pending' => 'on-hold',
+								'error', 'declined', 'canceled' => 'failed',
+								'refunded', 'chargeback' => 'refunded',
+								default => 'pending-payment',
+							};
+
+							$order->update_status($status, 'Status updated from Payment Gateway.');
+						}
+					}
+					else {
+						$order->update_status('failed', $responseBody['error_message']);
+						wc_add_notice($responseBody['error_message'], 'error');
+					}
+				} else {
+					$order->update_status('failed', 'Payment failed.');
+					wc_add_notice( 'Connection error.', 'error' );
+				}
+			}
+		}
+
+		public function process_payment( $order_id ) {
+			$order = wc_get_order($order_id);
+
+			// Check whether b2c or b2b is correctly selected
+			if (($this->is_b2b && $order->get_billing_company()) || (!$this->is_b2b && !$order->get_billing_company())) {
+				return $this->send_payment_request($order_id);
+			}
+			else {
+				if ($order->get_billing_company()) {
+					wc_add_notice( 'Please select B2B type payment method', 'error' );
+				}
+				else {
+					wc_add_notice( 'Please select non-B2B type payment method', 'error' );
+				}
+			}
+		}
+
+		private function send_payment_request($order_id) {
+			$order = wc_get_order($order_id);
+
+			$url     = Config_Reader::get_api_url() . '/rest/payment';
+			$body    = wp_json_encode( $this->get_parameters($order_id) );
+			$headers = [
+				'Content-Type'  => 'application/json',
+				'Authorization' => 'Basic ' . base64_encode( Config_Reader::get_api_key() . ':' . Config_Reader::get_outgoing_key() )
+			];
+
+			$response = wp_remote_post( $url, [
+				'headers' => $headers,
+				'body'    => $body,
+			] );
+
+			if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+				$responseBody = json_decode( wp_remote_retrieve_body( $response ), true );
+
+				if ( $responseBody['error_code'] == 0 ) {
+					$order->set_transaction_id( $responseBody['transaction_id'] );
+					$order->save();
+
+					$transaction_status = $responseBody['status'];
+
+					// Map status from Better Payment to WooCommerce
+					if ( $transaction_status == 'completed' ) {
+						$order->payment_complete();
+					} else {
+						$status = match ( $transaction_status ) {
+							'started', 'pending' => 'on-hold',
+							'error', 'declined', 'canceled' => 'failed',
+							'refunded', 'chargeback' => 'refunded',
+							default => 'pending-payment',
+						};
+
+						$order->update_status( $status, 'Status updated from Payment Gateway.' );
+					}
+
+					return [
+						'result'   => 'success',
+						'redirect' => $responseBody['action_data']['url'] ?? $this->get_return_url( $order )
+					];
+				} else {
+					$order->update_status( 'failed', $responseBody['error_message'] );
+					wc_add_notice( $responseBody['error_message'], 'error' );
+				}
+			} else {
+				$order->update_status( 'failed', 'Payment failed.' );
+				wc_add_notice( 'Connection error.', 'error' );
+			}
+		}
+
+		private function get_parameters( $order_id ): array {
+			$parameters = [];
+			$parameters += $this->get_common_parameters( $order_id );
+			$parameters += $this->get_billing_address_parameters( $order_id );
+			$parameters += $this->get_shipping_address_parameters( $order_id );
+
+			if ($this->is_async) {
+				$parameters += $this->get_redirect_url_parameters( $order_id );
+			}
+
+			if (!$this->is_async) {
+				$parameters += $this->get_risk_check_parameters();
+				$parameters += $this->get_additional_parameters();
+				$parameters += $this->get_company_parameters( $order_id );
+			}
+
+			return $parameters;
+		}
+
+		private function get_common_parameters($order_id): array
 		{
 			$order = wc_get_order($order_id);
 
@@ -51,7 +194,7 @@ if (class_exists('WC_Payment_Gateway')) {
 			];
 		}
 
-		protected function get_billing_address_parameters($order_id): array
+		private function get_billing_address_parameters($order_id): array
 		{
 			$order = wc_get_order($order_id);
 
@@ -79,7 +222,7 @@ if (class_exists('WC_Payment_Gateway')) {
 			];
 		}
 
-		protected function get_shipping_address_parameters($order_id): array
+		private function get_shipping_address_parameters($order_id): array
 		{
 			$order = wc_get_order($order_id);
 
@@ -105,7 +248,7 @@ if (class_exists('WC_Payment_Gateway')) {
 			];
 		}
 
-		protected function get_redirect_url_parameters($order_id): array
+		private function get_redirect_url_parameters($order_id): array
 		{
 			$order = wc_get_order( $order_id );
 
@@ -115,7 +258,7 @@ if (class_exists('WC_Payment_Gateway')) {
 			];
 		}
 
-		protected function get_company_parameters($order_id): array
+		private function get_company_parameters($order_id): array
 		{
 			if ($this->is_b2b) {
 				$order = wc_get_order($order_id);
@@ -131,33 +274,33 @@ if (class_exists('WC_Payment_Gateway')) {
 			return [];
 		}
 
-		protected function get_risk_check_parameters(): array
+		private function get_risk_check_parameters(): array
 		{
 			$parameters = [];
 
-			if (!empty($_POST['date_of_birth'])) {
+			if (!empty($_POST[$this->id . '_date_of_birth'])) {
 				$parameters += [
-					'date_of_birth' => $_POST['date_of_birth']
+					'date_of_birth' => $_POST[$this->id . '_date_of_birth']
 				];
 			}
 
-			if (!empty($_POST['gender'])) {
+			if (!empty($_POST[$this->id . '_gender'])) {
 				$parameters += [
-					'gender' => $_POST['gender']
+					'gender' => $_POST[$this->id . '_gender']
 				];
 			}
 
 			return $parameters;
 		}
 
-		protected function get_additional_parameters(): array
+		private function get_additional_parameters(): array
 		{
 			return match ($this->shortcode) {
 				'dd', 'dd_b2b' => [
-					'account_holder' => $_POST['account_holder'],
-					'iban' => $_POST['iban'],
-					'bic' => $_POST['bic'],
-					'sepa_mandate' => $_POST['mandate_reference'],
+					'account_holder' => $_POST[$this->id . '_account_holder'],
+					'iban' => $_POST[$this->id . '_iban'],
+					'bic' => $_POST[$this->id . '_bic'],
+					'sepa_mandate' => $_POST[$this->id . '_mandate_reference'],
 				],
 				// add other payment method specific additional data here
 				default => [],

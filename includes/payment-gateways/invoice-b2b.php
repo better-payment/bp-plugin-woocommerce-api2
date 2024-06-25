@@ -1,8 +1,8 @@
 <?php
-include_once 'abstract-sync-betterpayment-gateway.php';
+include_once 'abstract-betterpayment-gateway.php';
 
-if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
-	class BetterPayment_Invoice_B2B extends Abstract_Sync_BetterPayment_Gateway {
+if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
+	class BetterPayment_Invoice_B2B extends Abstract_BetterPayment_Gateway {
 		protected string $shortcode = 'kar_b2b';
 		protected bool $is_b2b = true;
 
@@ -85,7 +85,7 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 
 		public function payment_fields() {
 			if ($this->is_risk_check_agreement_required()) {
-				woocommerce_form_field('risk_check_agreement', [
+				woocommerce_form_field($this->id . '_risk_check_agreement', [
 					'type' => 'checkbox',
 					'label' => __('Agree to risk check processing'),
 					'required' => true,
@@ -94,7 +94,7 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 		}
 
 		public function validate_fields() {
-			if ( $this->is_risk_check_agreement_required() && empty($_POST['risk_check_agreement']) ) {
+			if ( $this->is_risk_check_agreement_required() && empty($_POST[$this->id . '_risk_check_agreement']) ) {
 				wc_add_notice( 'Risk check agreement is required', 'error' );
 			}
 		}

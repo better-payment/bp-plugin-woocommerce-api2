@@ -1,8 +1,8 @@
 <?php
-include_once 'abstract-sync-betterpayment-gateway.php';
+include_once 'abstract-betterpayment-gateway.php';
 
-if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
-	class BetterPayment_Sepa_Direct_Debit extends Abstract_Sync_BetterPayment_Gateway {
+if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
+	class BetterPayment_Sepa_Direct_Debit extends Abstract_BetterPayment_Gateway {
 		protected string $shortcode = 'dd';
 
 		public $id = 'betterpayment_dd';
@@ -67,13 +67,13 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 		}
 
 		public function payment_fields() {
-			woocommerce_form_field('iban', [
+			woocommerce_form_field($this->id . '_iban', [
 				'type' => 'text',
 				'required' => true,
 				'label' => __('IBAN:'),
 			]);
 
-			woocommerce_form_field('bic', [
+			woocommerce_form_field($this->id . '_bic', [
 				'type' => 'text',
 				'label' => __('BIC:'),
 			]);
@@ -100,17 +100,17 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 
 			echo wpautop( wptexturize( $html ) );
 
-			woocommerce_form_field('account_holder', [
+			woocommerce_form_field($this->id . '_account_holder', [
 				'type' => 'hidden',
 				'default' => $account_holder,
 			]);
 
-			woocommerce_form_field('mandate_reference', [
+			woocommerce_form_field($this->id . '_mandate_reference', [
 				'type' => 'hidden',
 				'default' => $mandate_reference,
 			]);
 
-			woocommerce_form_field('mandate_agreement', [
+			woocommerce_form_field($this->id . '_mandate_agreement', [
 				'type' => 'checkbox',
 				'label' => __('I agree to the following mandate'),
 				'required' => true,
@@ -124,7 +124,7 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 			}
 
 			if ($this->is_date_of_birth_collected()) {
-				woocommerce_form_field('date_of_birth', [
+				woocommerce_form_field($this->id . '_date_of_birth', [
 					'type' => 'date',
 					'required' => true,
 					'label' => __('Date of birth'),
@@ -132,7 +132,7 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 			}
 
 			if ($this->is_gender_collected()) {
-				woocommerce_form_field('gender', [
+				woocommerce_form_field($this->id . '_gender', [
 					'type' => 'select',
 					'options' => [
 						'' => __('Select...'),
@@ -146,7 +146,7 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 			}
 
 			if ($this->is_risk_check_agreement_required()) {
-				woocommerce_form_field('risk_check_agreement', [
+				woocommerce_form_field($this->id . '_risk_check_agreement', [
 					'type' => 'checkbox',
 					'label' => __('Agree to risk check processing'),
 					'required' => true,
@@ -155,23 +155,23 @@ if (class_exists( 'Abstract_Sync_BetterPayment_Gateway' )) {
 		}
 
 		public function validate_fields() {
-			if( empty($_POST['iban']) ) {
+			if( empty($_POST[$this->id . '_iban']) ) {
 				wc_add_notice( 'IBAN is required', 'error' );
 			}
 
-			if ( empty($_POST['mandate_agreement']) ) {
+			if ( empty($_POST[$this->id . '_mandate_agreement']) ) {
 				wc_add_notice( 'Mandate agreement is required', 'error' );
 			}
 
-			if ( $this->is_date_of_birth_collected() && empty($_POST['date_of_birth']) ) {
+			if ( $this->is_date_of_birth_collected() && empty($_POST[$this->id . '_date_of_birth']) ) {
 				wc_add_notice( 'Date of birth is required', 'error' );
 			}
 
-			if ( $this->is_gender_collected() && empty($_POST['gender']) ) {
+			if ( $this->is_gender_collected() && empty($_POST[$this->id . '_gender']) ) {
 				wc_add_notice( 'Gender is required', 'error' );
 			}
 
-			if ( $this->is_risk_check_agreement_required() && empty($_POST['risk_check_agreement']) ) {
+			if ( $this->is_risk_check_agreement_required() && empty($_POST[$this->id . '_risk_check_agreement']) ) {
 				wc_add_notice( 'Risk check agreement is required', 'error' );
 			}
 		}
