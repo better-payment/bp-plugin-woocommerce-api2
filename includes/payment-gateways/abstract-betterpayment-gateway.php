@@ -89,6 +89,7 @@ if (class_exists('WC_Payment_Gateway')) {
 			}
 		}
 
+		// Payment request order parameters
 		private function get_parameters( $order_id ): array {
 			$parameters = [];
 			$parameters += $this->get_common_parameters( $order_id );
@@ -255,6 +256,7 @@ if (class_exists('WC_Payment_Gateway')) {
 				default => [],
 			};
 		}
+		// Payment request order parameters END
 
 		public function update_order_status_on_thankyou_page( $order_id ): void {
 			if ( ! $order_id ) {

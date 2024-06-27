@@ -47,6 +47,11 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			// Include payment methods
 			include_once 'includes/payment-gateways/credit-card.php';
 			include_once 'includes/payment-gateways/paypal.php';
+			include_once 'includes/payment-gateways/paydirekt.php';
+			include_once 'includes/payment-gateways/giropay.php';
+			include_once 'includes/payment-gateways/sofort.php';
+			include_once 'includes/payment-gateways/request-to-pay.php';
+			include_once 'includes/payment-gateways/aiia-pay.php';
 			include_once 'includes/payment-gateways/sepa-direct-debit.php';
 			include_once 'includes/payment-gateways/sepa-direct-debit-b2b.php';
 			include_once 'includes/payment-gateways/invoice.php';
@@ -80,6 +85,11 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 		public function add_betterpayment_gateways($methods) {
 			$methods[] = 'BetterPayment_Credit_Card';
 			$methods[] = 'BetterPayment_PayPal';
+			$methods[] = 'BetterPayment_Paydirekt';
+			$methods[] = 'BetterPayment_Giropay';
+			$methods[] = 'BetterPayment_Sofort';
+			$methods[] = 'BetterPayment_Request_To_Pay';
+			$methods[] = 'BetterPayment_Aiia_Pay';
 			$methods[] = 'BetterPayment_Sepa_Direct_Debit';
 			$methods[] = 'BetterPayment_Sepa_Direct_Debit_B2B';
 			$methods[] = 'BetterPayment_Invoice';
