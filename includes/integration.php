@@ -5,21 +5,13 @@ if (class_exists('WC_Integration')) {
 		 * Init and hook in the integration.
 		 */
 		public function __construct() {
-			global $woocommerce;
-
 			$this->id           = 'betterpayment';
 			$this->method_title = __( 'Better Payment' );
-//			$this->method_description = __( 'Base configuration');
 
 			// Load the settings.
 			$this->init_form_fields();
 			$this->init_settings();
 
-			// Define user set variables.
-//			$this->api_key = $this->get_option( 'api_key' );
-//			$this->debug   = $this->get_option( 'debug' );
-
-			// Actions.
 			add_action('woocommerce_update_options_integration_' . $this->id, array($this, 'process_admin_options'));
 		}
 

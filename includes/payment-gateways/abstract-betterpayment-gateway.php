@@ -2,6 +2,7 @@
 
 if (class_exists('WC_Payment_Gateway')) {
 	abstract class Abstract_BetterPayment_Gateway extends WC_Payment_Gateway {
+		public $supports = ['refunds'];
 		protected string $shortcode;
 		protected bool $is_b2b = false;
 		protected bool $is_async = false;
@@ -16,57 +17,6 @@ if (class_exists('WC_Payment_Gateway')) {
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			if ($this->is_async) {
 				add_action( 'woocommerce_thankyou', array($this, 'update_order_status_on_thankyou_page'));
-			}
-		}
-
-		public function update_order_status_on_thankyou_page( $order_id ): void {
-			if ( ! $order_id ) {
-				return;
-			}
-
-			$order = wc_get_order( $order_id );
-			$transaction_id = $order->get_transaction_id();
-
-			if ($transaction_id) {
-				$url = Config_Reader::get_api_url() . '/rest/transactions/' . $transaction_id;
-				$headers = [
-					'Content-Type' => 'application/json',
-					'Authorization' => 'Basic ' . base64_encode( Config_Reader::get_api_key() . ':' . Config_Reader::get_outgoing_key())
-				];
-
-				$response = wp_remote_get( $url, [
-					'headers' => $headers,
-				]);
-
-				if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-					$responseBody = json_decode( wp_remote_retrieve_body( $response ), true );
-
-					if (!isset($responseBody['error_code'])) {
-						$transaction_status = $responseBody['status'];
-
-						// Map status from Better Payment to WooCommerce
-						if ($transaction_status == 'completed') {
-							$order->payment_complete();
-						}
-						else {
-							$status = match ($transaction_status) {
-								'started', 'pending' => 'on-hold',
-								'error', 'declined', 'canceled' => 'failed',
-								'refunded', 'chargeback' => 'refunded',
-								default => 'pending-payment',
-							};
-
-							$order->update_status($status, 'Status updated from Payment Gateway.');
-						}
-					}
-					else {
-						$order->update_status('failed', $responseBody['error_message']);
-						wc_add_notice($responseBody['error_message'], 'error');
-					}
-				} else {
-					$order->update_status('failed', 'Payment failed.');
-					wc_add_notice( 'Connection error.', 'error' );
-				}
 			}
 		}
 
@@ -148,8 +98,7 @@ if (class_exists('WC_Payment_Gateway')) {
 			if ($this->is_async) {
 				$parameters += $this->get_redirect_url_parameters( $order_id );
 			}
-
-			if (!$this->is_async) {
+			else {
 				$parameters += $this->get_risk_check_parameters();
 				$parameters += $this->get_additional_parameters();
 				$parameters += $this->get_company_parameters( $order_id );
@@ -305,6 +254,90 @@ if (class_exists('WC_Payment_Gateway')) {
 				// add other payment method specific additional data here
 				default => [],
 			};
+		}
+
+		public function update_order_status_on_thankyou_page( $order_id ): void {
+			if ( ! $order_id ) {
+				return;
+			}
+
+			$order = wc_get_order( $order_id );
+			$transaction_id = $order->get_transaction_id();
+
+			if ($transaction_id) {
+				$url = Config_Reader::get_api_url() . '/rest/transactions/' . $transaction_id;
+				$headers = [
+					'Content-Type' => 'application/json',
+					'Authorization' => 'Basic ' . base64_encode( Config_Reader::get_api_key() . ':' . Config_Reader::get_outgoing_key())
+				];
+
+				$response = wp_remote_get( $url, [
+					'headers' => $headers,
+				]);
+
+				if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+					$responseBody = json_decode( wp_remote_retrieve_body( $response ), true );
+
+					if (!isset($responseBody['error_code'])) {
+						$transaction_status = $responseBody['status'];
+
+						// Map status from Better Payment to WooCommerce
+						if ($transaction_status == 'completed') {
+							$order->payment_complete();
+						}
+						else {
+							$status = match ($transaction_status) {
+								'started', 'pending' => 'on-hold',
+								'error', 'declined', 'canceled' => 'failed',
+								'refunded', 'chargeback' => 'refunded',
+								default => 'pending-payment',
+							};
+
+							$order->update_status($status, 'Status updated from Payment Gateway.');
+						}
+					}
+					else {
+						$order->update_status('failed', $responseBody['error_message']);
+						wc_add_notice($responseBody['error_message'], 'error');
+					}
+				} else {
+					$order->update_status('failed', 'Payment failed.');
+					wc_add_notice( 'Connection error.', 'error' );
+				}
+			}
+		}
+
+		public function process_refund( $order_id, $amount = null, $reason = '' ) {
+			$order = wc_get_order( $order_id );
+			$parameters = [
+				'transaction_id' => $order->get_transaction_id(),
+				'amount' => $amount,
+				'comment' => $reason,
+			];
+
+			$url     = Config_Reader::get_api_url() . '/rest/refund';
+			$body    = wp_json_encode( $parameters );
+			$headers = [
+				'Content-Type'  => 'application/json',
+				'Authorization' => 'Basic ' . base64_encode( Config_Reader::get_api_key() . ':' . Config_Reader::get_outgoing_key() )
+			];
+
+			$response = wp_remote_post( $url, [
+				'headers' => $headers,
+				'body'    => $body,
+			] );
+
+			if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+				$responseBody = json_decode( wp_remote_retrieve_body( $response ), true );
+
+				if ( $responseBody['error_code'] == 0 ) {
+					return true;
+				} else {
+					return new WP_Error( 'error', $responseBody['error_message'] );
+				}
+			} else {
+				return new WP_Error( 'error', 'Connection error.' );
+			}
 		}
 	}
 }
