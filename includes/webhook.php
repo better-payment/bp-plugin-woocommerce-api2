@@ -37,7 +37,7 @@ function handle_webhook (WP_REST_Request $request): WP_REST_Response {
 					default => 'pending-payment',
 				};
 
-				$order->update_status($status, 'Status updated via webhook.');
+				$order->update_status($status, __('Status updated via webhook.', 'bp-plugin-woocommerce-api2'));
 			}
 
 			return new WP_REST_Response('Status updated successfully!', 200);

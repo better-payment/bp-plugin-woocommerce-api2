@@ -137,7 +137,7 @@ if (class_exists('WC_Payment_Gateway')) {
 				'customer_ip' => $order->get_customer_ip_address(),
 				// The language of payment forms in Credit Card and Paypal. Possible locale values - https://testdashboard.betterpayment.de/docs/#locales
 				// use substr to convert en_US to en
-				'locale' => 'en', // TODO: fetch dynamically
+				'locale' => get_user_locale(),
 				// module/plugin metadata
 				'app_name' => Config_Reader::get_app_name(),
 				'app_version' => Config_Reader::get_app_version(),
