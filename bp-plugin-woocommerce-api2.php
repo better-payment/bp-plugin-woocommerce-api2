@@ -6,15 +6,8 @@
  * Version: 1.0.0
  * Author: Better Payment
  * Author URI: https://betterpayment.de
- * Developer: Your Name
- * Developer URI: https://betterpayment.de
- * Text Domain: betterpayment
+ * Text Domain: bp-plugin-woocommerce-api2
  * Domain Path: /languages
- *
- * Woo: 12345:342928dfsfhsf8429842374wdf4234sfd
- *
- * License: GNU General Public License v3.0
- * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  */
 
 //defined( 'ABSPATH' ) || exit;
@@ -28,7 +21,8 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			// Checks if WooCommerce is installed.
 			add_action('admin_notices', function () {
 				if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
-					echo "<div class='notice notice-error'><p>Better Payment WooCommerce Extension requires Woocommerce plugin to be activated</p></div>";
+					$message = __('Better Payment WooCommerce Extension requires Woocommerce plugin to be activated', 'bp-plugin-woocommerce-api2');
+					echo "<div class='notice notice-error'><p>$message</p></div>";
 				}
 			});
 
@@ -64,6 +58,9 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 
 			// Include webhook route endpoint
 			include_once 'includes/webhook.php';
+
+			// Load translations
+			load_plugin_textdomain( 'bp-plugin-woocommerce-api2', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 		}
 
 		/**
