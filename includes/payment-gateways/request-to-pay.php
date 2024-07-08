@@ -6,21 +6,25 @@ if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
 		protected string $shortcode = 'rtp';
 		protected bool $is_async = true;
 
-		public $id = 'betterpayment_rtp';
-		public $method_title = 'Request To Pay (Better Payment)';
-		public $method_description = 'Request To Pay payment method of Better Payment Gateway';
+		public function __construct() {
+			$this->id = 'betterpayment_rtp';
+			$this->method_title = __( 'Request To Pay (Better Payment)', 'bp-plugin-woocommerce-api2' );
+			$this->method_description = __( 'Request To Pay payment method of Better Payment', 'bp-plugin-woocommerce-api2' );
+
+			parent::__construct();
+		}
 
 		public function init_form_fields() {
 			$this->form_fields = [
 				'enabled' => [
-					'title' => 'Enabled',
+					'title' => __( 'Enabled', 'bp-plugin-woocommerce-api2' ),
 					'type' => 'checkbox',
 					'default' => false
 				],
 				'title' => [
-					'title' => 'Title',
+					'title' => __( 'Title', 'bp-plugin-woocommerce-api2' ),
 					'type' => 'text',
-					'default' => 'Request To Pay (Better Payment)',
+					'default' => __( 'Request To Pay (Better Payment)', 'bp-plugin-woocommerce-api2' ),
 				]
 			];
 		}

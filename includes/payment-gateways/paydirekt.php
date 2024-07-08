@@ -6,21 +6,25 @@ if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
 		protected string $shortcode = 'paydirekt';
 		protected bool $is_async = true;
 
-		public $id = 'betterpayment_paydirekt';
-		public $method_title = 'Paydirekt (Better Payment)';
-		public $method_description = 'Paydirekt payment method of Better Payment Gateway';
+		public function __construct() {
+			$this->id = 'betterpayment_paydirekt';
+			$this->method_title = __( 'Paydirekt (Better Payment)', 'bp-plugin-woocommerce-api2' );
+			$this->method_description = __( 'Paydirekt payment method of Better Payment', 'bp-plugin-woocommerce-api2' );
+
+			parent::__construct();
+		}
 
 		public function init_form_fields() {
 			$this->form_fields = [
 				'enabled' => [
-					'title' => 'Enabled',
+					'title' => __( 'Enabled', 'bp-plugin-woocommerce-api2' ),
 					'type' => 'checkbox',
 					'default' => false
 				],
 				'title' => [
-					'title' => 'Title',
+					'title' => __( 'Title', 'bp-plugin-woocommerce-api2' ),
 					'type' => 'text',
-					'default' => 'Paydirekt (Better Payment)',
+					'default' => __( 'Paydirekt (Better Payment)', 'bp-plugin-woocommerce-api2' ),
 				]
 			];
 		}

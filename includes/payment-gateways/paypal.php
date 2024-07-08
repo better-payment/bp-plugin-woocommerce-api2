@@ -6,21 +6,25 @@ if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
 		protected string $shortcode = 'paypal';
 		protected bool $is_async = true;
 
-		public $id = 'betterpayment_paypal';
-		public $method_title = 'PayPal (Better Payment)';
-		public $method_description = 'PayPal payment method of Better Payment Gateway';
+		public function __construct() {
+			$this->id = 'betterpayment_paypal';
+			$this->method_title = __( 'PayPal (Better Payment)', 'bp-plugin-woocommerce-api2' );
+			$this->method_description = __( 'PayPal payment method of Better Payment', 'bp-plugin-woocommerce-api2' );
+
+			parent::__construct();
+		}
 
 		public function init_form_fields(): void {
 			$this->form_fields = [
 				'enabled' => [
-					'title' => 'Enabled',
+					'title' => __( 'Enabled', 'bp-plugin-woocommerce-api2' ),
 					'type' => 'checkbox',
 					'default' => false
 				],
 				'title' => [
-					'title' => 'Title',
+					'title' => __( 'Title', 'bp-plugin-woocommerce-api2' ),
 					'type' => 'text',
-					'default' => 'PayPal (Better Payment)',
+					'default' => __( 'PayPal (Better Payment)', 'bp-plugin-woocommerce-api2' ),
 				]
 			];
 		}

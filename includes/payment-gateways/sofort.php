@@ -6,21 +6,25 @@ if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
 		protected string $shortcode = 'sofort';
 		protected bool $is_async = true;
 
-		public $id = 'betterpayment_sofort';
-		public $method_title = 'Sofort (Better Payment)';
-		public $method_description = 'Sofort payment method of Better Payment Gateway';
+		public function __construct() {
+			$this->id = 'betterpayment_sofort';
+			$this->method_title = __( 'Sofort (Better Payment)', 'bp-plugin-woocommerce-api2' );
+			$this->method_description = __( 'Sofort payment method of Better Payment', 'bp-plugin-woocommerce-api2' );
+
+			parent::__construct();
+		}
 
 		public function init_form_fields() {
 			$this->form_fields = [
 				'enabled' => [
-					'title' => 'Enabled',
+					'title' => __( 'Enabled', 'bp-plugin-woocommerce-api2' ),
 					'type' => 'checkbox',
 					'default' => false
 				],
 				'title' => [
-					'title' => 'Title',
+					'title' => __( 'Title', 'bp-plugin-woocommerce-api2' ),
 					'type' => 'text',
-					'default' => 'Sofort (Better Payment)',
+					'default' => __( 'Sofort (Better Payment)', 'bp-plugin-woocommerce-api2' ),
 				]
 			];
 		}

@@ -6,21 +6,25 @@ if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
 		protected string $shortcode = 'giro';
 		protected bool $is_async = true;
 
-		public $id = 'betterpayment_giro';
-		public $method_title = 'Giropay (Better Payment)';
-		public $method_description = 'Giropay payment method of Better Payment Gateway';
+		public function __construct() {
+			$this->id = 'betterpayment_giro';
+			$this->method_title = __( 'Giropay (Better Payment)', 'bp-plugin-woocommerce-api2' );
+			$this->method_description = __( 'Giropay payment method of Better Payment', 'bp-plugin-woocommerce-api2' );
+
+			parent::__construct();
+		}
 
 		public function init_form_fields() {
 			$this->form_fields = [
 				'enabled' => [
-					'title' => 'Enabled',
+					'title' => __( 'Enabled', 'bp-plugin-woocommerce-api2' ),
 					'type' => 'checkbox',
 					'default' => false
 				],
 				'title' => [
-					'title' => 'Title',
+					'title' => __( 'Title', 'bp-plugin-woocommerce-api2' ),
 					'type' => 'text',
-					'default' => 'Giropay (Better Payment)',
+					'default' => __( 'Giropay (Better Payment)', 'bp-plugin-woocommerce-api2' ),
 				]
 			];
 		}
