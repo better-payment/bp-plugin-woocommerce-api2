@@ -1,0 +1,469 @@
+# Copyright (C) 2024 Better Payment
+# This file is distributed under the same license as the Better Payment WooCommerce Extension plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Better Payment WooCommerce Extension 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bp-plugin-woocommerce-api2\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-07-08T12:56:35+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: bp-plugin-woocommerce-api2\n"
+
+#. Plugin Name of the plugin
+#: bp-plugin-woocommerce-api2.php
+msgid "Better Payment WooCommerce Extension"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: bp-plugin-woocommerce-api2.php
+msgid "https://github.com/better-payment/bp-plugin-woocommerce-api2"
+msgstr ""
+
+#. Description of the plugin
+#: bp-plugin-woocommerce-api2.php
+msgid "Better Payment plugin to implement payment methods using API2"
+msgstr ""
+
+#. Author of the plugin
+#: bp-plugin-woocommerce-api2.php
+msgid "Better Payment"
+msgstr ""
+
+#. Author URI of the plugin
+#: bp-plugin-woocommerce-api2.php
+msgid "https://betterpayment.de"
+msgstr ""
+
+#: bp-plugin-woocommerce-api2.php:24
+msgid "Better Payment WooCommerce Extension requires Woocommerce plugin to be activated"
+msgstr ""
+
+#: includes/integration.php:24
+msgid "Environment"
+msgstr ""
+
+#: includes/integration.php:28
+msgid "Test"
+msgstr ""
+
+#: includes/integration.php:29
+msgid "Production"
+msgstr ""
+
+#: includes/integration.php:33
+msgid "Test API URL"
+msgstr ""
+
+#: includes/integration.php:35
+msgid "You can find your test API url in test dashboard of the payment provider."
+msgstr ""
+
+#: includes/integration.php:41
+msgid "Test API key"
+msgstr ""
+
+#: includes/integration.php:44
+msgid "You can find your test API key in test dashboard of the payment provider."
+msgstr ""
+
+#: includes/integration.php:47
+msgid "Test Outgoing key"
+msgstr ""
+
+#: includes/integration.php:50
+#: includes/integration.php:56
+msgid "You can find your test Outgoing key in test dashboard of the payment provider."
+msgstr ""
+
+#: includes/integration.php:53
+msgid "Test Incoming key"
+msgstr ""
+
+#: includes/integration.php:59
+msgid "Production API URL"
+msgstr ""
+
+#: includes/integration.php:62
+msgid "You can find your API url in production dashboard of the payment provider."
+msgstr ""
+
+#: includes/integration.php:67
+msgid "Production API key"
+msgstr ""
+
+#: includes/integration.php:70
+msgid "You can find your API key in production dashboard of the payment provider."
+msgstr ""
+
+#: includes/integration.php:73
+msgid "Production Outgoing key"
+msgstr ""
+
+#: includes/integration.php:76
+msgid "You can find your Outgoing key in production dashboard of the payment provider."
+msgstr ""
+
+#: includes/integration.php:79
+msgid "Production Incoming key"
+msgstr ""
+
+#: includes/integration.php:82
+msgid "You can find your Incoming key in production dashboard of the payment provider."
+msgstr ""
+
+#: includes/payment-gateways/aiia-pay.php:11
+#: includes/payment-gateways/aiia-pay.php:27
+msgid "Aiia Pay (Better Payment)"
+msgstr ""
+
+#: includes/payment-gateways/aiia-pay.php:12
+msgid "Aiia Pay payment method of Better Payment"
+msgstr ""
+
+#: includes/payment-gateways/aiia-pay.php:20
+#: includes/payment-gateways/credit-card.php:20
+#: includes/payment-gateways/giropay.php:20
+#: includes/payment-gateways/invoice-b2b.php:29
+#: includes/payment-gateways/invoice.php:28
+#: includes/payment-gateways/paydirekt.php:20
+#: includes/payment-gateways/paypal.php:20
+#: includes/payment-gateways/request-to-pay.php:20
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:21
+#: includes/payment-gateways/sepa-direct-debit.php:20
+#: includes/payment-gateways/sofort.php:20
+msgid "Enabled"
+msgstr ""
+
+#: includes/payment-gateways/aiia-pay.php:25
+#: includes/payment-gateways/credit-card.php:25
+#: includes/payment-gateways/giropay.php:25
+#: includes/payment-gateways/invoice-b2b.php:34
+#: includes/payment-gateways/invoice.php:33
+#: includes/payment-gateways/paydirekt.php:25
+#: includes/payment-gateways/paypal.php:25
+#: includes/payment-gateways/request-to-pay.php:25
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:26
+#: includes/payment-gateways/sepa-direct-debit.php:25
+#: includes/payment-gateways/sofort.php:25
+msgid "Title"
+msgstr ""
+
+#: includes/payment-gateways/credit-card.php:11
+#: includes/payment-gateways/credit-card.php:27
+msgid "Credit Card (Better Payment)"
+msgstr ""
+
+#: includes/payment-gateways/credit-card.php:12
+msgid "Credit Card payment method of Better Payment"
+msgstr ""
+
+#: includes/payment-gateways/giropay.php:11
+#: includes/payment-gateways/giropay.php:27
+msgid "Giropay (Better Payment)"
+msgstr ""
+
+#: includes/payment-gateways/giropay.php:12
+msgid "Giropay payment method of Better Payment"
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:18
+#: includes/payment-gateways/invoice-b2b.php:36
+msgid "Invoice B2B (Better Payment)"
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:19
+msgid "Invoice B2B payment method of Better Payment"
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:39
+#: includes/payment-gateways/invoice.php:50
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:41
+#: includes/payment-gateways/sepa-direct-debit.php:52
+msgid "Require customers to agree to risk check processing"
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:42
+#: includes/payment-gateways/invoice.php:53
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:44
+#: includes/payment-gateways/sepa-direct-debit.php:55
+msgid "If you turn this flag on, we will require the customer to agree to the risk check processing in the checkout page. Without agreement, payments will not go through. You can turn this field off, in case you provide it as part of your terms and conditions."
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:45
+#: includes/payment-gateways/invoice.php:56
+msgid "Display payment instruction to the customer"
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:48
+#: includes/payment-gateways/invoice.php:59
+msgid "When activated, we will be instructing the customer that they should send ORDER_ID as a reference with amount due to the given bank account below."
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:51
+#: includes/payment-gateways/invoice.php:62
+msgid "IBAN (optional)"
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:53
+#: includes/payment-gateways/invoice.php:64
+msgid "IBAN of your company"
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:56
+#: includes/payment-gateways/invoice.php:67
+msgid "BIC (optional)"
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:58
+#: includes/payment-gateways/invoice.php:69
+msgid "BIC of your company"
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:73
+#: includes/payment-gateways/invoice.php:92
+msgid "Invoice payment instructions"
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:74
+#: includes/payment-gateways/invoice.php:93
+msgid "IBAN: "
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:75
+#: includes/payment-gateways/invoice.php:94
+msgid "BIC: "
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:76
+#: includes/payment-gateways/invoice.php:95
+msgid "Reference: "
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:77
+#: includes/payment-gateways/invoice.php:96
+msgid "Please, transfer the full invoice amount to the bank account displayed in this page. Include reference mentioned above, in your transfer. Your order will stay pending until the payment has been cleared."
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:95
+#: includes/payment-gateways/invoice.php:142
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:107
+#: includes/payment-gateways/sepa-direct-debit.php:155
+msgid "Agree to risk check processing"
+msgstr ""
+
+#: includes/payment-gateways/invoice-b2b.php:103
+#: includes/payment-gateways/invoice.php:158
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:123
+#: includes/payment-gateways/sepa-direct-debit.php:179
+msgid "Risk check agreement is required"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:17
+#: includes/payment-gateways/invoice.php:35
+msgid "Invoice (Better Payment)"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:18
+msgid "Invoice payment method of Better Payment"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:38
+#: includes/payment-gateways/sepa-direct-debit.php:40
+msgid "Collect date of birth"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:41
+#: includes/payment-gateways/sepa-direct-debit.php:43
+msgid "If you have configured risk checks with the payment provider, it may require date of birth from your customers."
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:44
+#: includes/payment-gateways/sepa-direct-debit.php:46
+msgid "Collect gender information"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:47
+#: includes/payment-gateways/sepa-direct-debit.php:49
+msgid "If you have configured risk checks with the payment provider, it may require gender from your customers."
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:113
+#: includes/payment-gateways/sepa-direct-debit.php:126
+msgid "Risk check information"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:121
+#: includes/payment-gateways/sepa-direct-debit.php:134
+msgid "Date of birth"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:129
+#: includes/payment-gateways/sepa-direct-debit.php:142
+msgid "Select..."
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:130
+#: includes/payment-gateways/sepa-direct-debit.php:143
+msgid "Male"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:131
+#: includes/payment-gateways/sepa-direct-debit.php:144
+msgid "Female"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:132
+#: includes/payment-gateways/sepa-direct-debit.php:145
+msgid "Diverse"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:135
+#: includes/payment-gateways/sepa-direct-debit.php:148
+msgid "Gender"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:150
+#: includes/payment-gateways/sepa-direct-debit.php:171
+msgid "Date of birth is required"
+msgstr ""
+
+#: includes/payment-gateways/invoice.php:154
+#: includes/payment-gateways/sepa-direct-debit.php:175
+msgid "Gender is required"
+msgstr ""
+
+#: includes/payment-gateways/paydirekt.php:11
+#: includes/payment-gateways/paydirekt.php:27
+msgid "Paydirekt (Better Payment)"
+msgstr ""
+
+#: includes/payment-gateways/paydirekt.php:12
+msgid "Paydirekt payment method of Better Payment"
+msgstr ""
+
+#: includes/payment-gateways/paypal.php:11
+#: includes/payment-gateways/paypal.php:27
+msgid "PayPal (Better Payment)"
+msgstr ""
+
+#: includes/payment-gateways/paypal.php:12
+msgid "PayPal payment method of Better Payment"
+msgstr ""
+
+#: includes/payment-gateways/request-to-pay.php:11
+#: includes/payment-gateways/request-to-pay.php:27
+msgid "Request To Pay (Better Payment)"
+msgstr ""
+
+#: includes/payment-gateways/request-to-pay.php:12
+msgid "Request To Pay payment method of Better Payment"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:11
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:28
+msgid "Sepa Direct Debit B2B (Better Payment)"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:12
+msgid "Sepa Direct Debit B2B payment method of Better Payment"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:31
+#: includes/payment-gateways/sepa-direct-debit.php:30
+msgid "Creditor ID"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:33
+#: includes/payment-gateways/sepa-direct-debit.php:32
+msgid "You need to provide a valid Creditor ID, to be shown in mandate agreement on the checkout page."
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:36
+#: includes/payment-gateways/sepa-direct-debit.php:35
+msgid "Company name"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:38
+#: includes/payment-gateways/sepa-direct-debit.php:37
+msgid "You need to provide Company Name, to be shown in mandate reference agreement on the checkout page."
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:57
+#: includes/payment-gateways/sepa-direct-debit.php:76
+msgid "IBAN"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:62
+#: includes/payment-gateways/sepa-direct-debit.php:81
+msgid "BIC"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:70
+#: includes/payment-gateways/sepa-direct-debit.php:89
+msgid "Account holder: "
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:71
+#: includes/payment-gateways/sepa-direct-debit.php:90
+msgid "Creditor ID: "
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:72
+#: includes/payment-gateways/sepa-direct-debit.php:91
+msgid "Company name: "
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:73
+#: includes/payment-gateways/sepa-direct-debit.php:92
+msgid "Mandate reference: "
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:84
+msgid "By signing this mandate form, you authorise (A) %s to send instructions to your bank to debit your account and (B) your bank to debit your account in accordance with the instructions from %s. This mandate is only intended for business-to-business transactions. You are not entitled to a refund from your bank after your account has been debited, but you are entitled to request your bank not to debit your account up until the day on which the payment is due."
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:100
+#: includes/payment-gateways/sepa-direct-debit.php:119
+msgid "I agree to the following mandate"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:115
+#: includes/payment-gateways/sepa-direct-debit.php:163
+msgid "IBAN is required"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit-b2b.php:119
+#: includes/payment-gateways/sepa-direct-debit.php:167
+msgid "Mandate agreement is required"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit.php:10
+#: includes/payment-gateways/sepa-direct-debit.php:27
+msgid "Sepa Direct Debit (Better Payment)"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit.php:11
+msgid "Sepa Direct Debit payment method of Better Payment"
+msgstr ""
+
+#: includes/payment-gateways/sepa-direct-debit.php:103
+msgid "By signing this mandate form, you authorise (A) %s to send instructions to your bank to debit your account and (B) your bank to debit your account in accordance with the instructions from %s. As part of your rights, you are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within eight weeks starting from the date on which your account was debited."
+msgstr ""
+
+#: includes/payment-gateways/sofort.php:11
+#: includes/payment-gateways/sofort.php:27
+msgid "Sofort (Better Payment)"
+msgstr ""
+
+#: includes/payment-gateways/sofort.php:12
+msgid "Sofort payment method of Better Payment"
+msgstr ""
+
+#: includes/webhook.php:40
+msgid "Status updated via webhook."
+msgstr ""
