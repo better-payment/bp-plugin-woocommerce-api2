@@ -30,6 +30,10 @@ Make sure you have installed and activated Woo Commerce and then proceed to:
 
 **Please, always use TEST environment when trying to configure the plugin for your test shops.**
 
+## Further Notes
+
+**Our plugin currently does not support [Woo Commerce's Block Based Checkouts](https://woocommerce.com/checkout-blocks/). However, this is currently in development and will be released soon.**
+
 ## Support
 
 Regarding any feature requests or bug reports, please contact helpdesk@betterpayment.de or open an issue in our [issue board](https://github.com/better-payment/bp-plugin-woocommerce-api2/issues).
