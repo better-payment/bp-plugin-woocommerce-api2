@@ -46,6 +46,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			include_once 'includes/payment-gateways/sofort.php';
 			include_once 'includes/payment-gateways/request-to-pay.php';
 			include_once 'includes/payment-gateways/aiia-pay.php';
+			include_once 'includes/payment-gateways/ideal.php';
 			include_once 'includes/payment-gateways/sepa-direct-debit.php';
 			include_once 'includes/payment-gateways/sepa-direct-debit-b2b.php';
 			include_once 'includes/payment-gateways/invoice.php';
@@ -87,6 +88,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			$methods[] = 'BetterPayment_Sofort';
 			$methods[] = 'BetterPayment_Request_To_Pay';
 			$methods[] = 'BetterPayment_Aiia_Pay';
+			$methods[] = 'BetterPayment_Ideal';
 			$methods[] = 'BetterPayment_Sepa_Direct_Debit';
 			$methods[] = 'BetterPayment_Sepa_Direct_Debit_B2B';
 			$methods[] = 'BetterPayment_Invoice';
