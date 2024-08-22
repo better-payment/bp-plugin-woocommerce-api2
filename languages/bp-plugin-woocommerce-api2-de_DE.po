@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Better Payment WooCommerce Extension 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bp-plugin-"
 "woocommerce-api2\n"
-"POT-Creation-Date: 2024-07-08T12:56:35+00:00\n"
-"PO-Revision-Date: 2024-07-10 14:34+0400\n"
+"POT-Creation-Date: 2024-08-21T07:37:29+00:00\n"
+"PO-Revision-Date: 2024-08-21 11:45+0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -155,6 +155,7 @@ msgstr "Aiia Pay Zahlungsmethode von Better Payment"
 #: includes/payment-gateways/aiia-pay.php:20
 #: includes/payment-gateways/credit-card.php:20
 #: includes/payment-gateways/giropay.php:20
+#: includes/payment-gateways/ideal.php:20
 #: includes/payment-gateways/invoice-b2b.php:29
 #: includes/payment-gateways/invoice.php:28
 #: includes/payment-gateways/paydirekt.php:20
@@ -169,6 +170,7 @@ msgstr "Aktiviert"
 #: includes/payment-gateways/aiia-pay.php:25
 #: includes/payment-gateways/credit-card.php:25
 #: includes/payment-gateways/giropay.php:25
+#: includes/payment-gateways/ideal.php:25
 #: includes/payment-gateways/invoice-b2b.php:34
 #: includes/payment-gateways/invoice.php:33
 #: includes/payment-gateways/paydirekt.php:25
@@ -197,6 +199,15 @@ msgstr "Giropay (Better Payment)"
 #: includes/payment-gateways/giropay.php:12
 msgid "Giropay payment method of Better Payment"
 msgstr "Giropay Zahlungsmethode von Better Payment"
+
+#: includes/payment-gateways/ideal.php:11
+#: includes/payment-gateways/ideal.php:27
+msgid "iDEAL (Better Payment)"
+msgstr "iDEAL (Better Payment)"
+
+#: includes/payment-gateways/ideal.php:12
+msgid "iDEAL payment method of Better Payment"
+msgstr "iDEAL Zahlungsmethode von Better Payment"
 
 #: includes/payment-gateways/invoice-b2b.php:18
 #: includes/payment-gateways/invoice-b2b.php:36
