@@ -12,6 +12,9 @@
 
 //defined( 'ABSPATH' ) || exit;
 
+use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
+
 if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 	class WC_BetterPayment_Plugin {
 		/**
@@ -27,6 +30,8 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			});
 
 			add_action( 'plugins_loaded', array( $this, 'init' ) );
+			add_action( 'before_woocommerce_init', array( $this, 'declare_cart_checkout_blocks_compatibility' ) );
+			add_action( 'woocommerce_blocks_loaded', array( $this, 'betterpayment_blocks_support' ) );
 		}
 
 		/**
@@ -95,6 +100,25 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			$methods[] = 'BetterPayment_Invoice_B2B';
 
 			return $methods;
+		}
+
+		public function declare_cart_checkout_blocks_compatibility() {
+			if (class_exists('\Automattic\WooCommerce\Utilities\FeaturesUtil')) {
+				FeaturesUtil::declare_compatibility('cart_checkout_blocks', __FILE__, true);
+			}
+		}
+
+		public function betterpayment_blocks_support() {
+			if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+				include_once 'includes/blocks/payments/credit-card.php';
+
+				add_action(
+					'woocommerce_blocks_payment_method_type_registration',
+					function( PaymentMethodRegistry $payment_method_registry ) {
+						$payment_method_registry->register( new BetterPayment_Credit_Card_Block() );
+					}
+				);
+			}
 		}
 	}
 }
