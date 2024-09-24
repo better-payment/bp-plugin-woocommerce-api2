@@ -1,17 +1,17 @@
 const paypalData = window.wc.wcSettings.getPaymentMethodData('betterpayment_paypal');
 
-const creditCardLabel = paypalData.title;
-const creditCardContent = () => {
+const paypalLabel = paypalData.title;
+const paypalContent = () => {
     return paypalData.description;
 };
 
 window.wc.wcBlocksRegistry.registerPaymentMethod({
-    name: 'betterpayment_cc',
-    label: creditCardLabel,
-    content: Object( window.wp.element.createElement )( creditCardContent, null ),
-    edit: Object( window.wp.element.createElement )( creditCardContent, null ),
+    name: 'betterpayment_paypal',
+    label: paypalLabel,
+    content: Object( window.wp.element.createElement )( paypalContent, null ),
+    edit: Object( window.wp.element.createElement )( paypalContent, null ),
     canMakePayment: () => true,
-    ariaLabel: creditCardLabel,
+    ariaLabel: paypalLabel,
     // supports: {
     //     features: settings.supports,
     // }
