@@ -113,6 +113,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 				include_once 'includes/blocks/payments/credit-card.php';
 				include_once 'includes/blocks/payments/paypal.php';
 				include_once 'includes/blocks/payments/aiia-pay.php';
+				include_once 'includes/blocks/payments/giropay.php';
 
 				add_action(
 					'woocommerce_blocks_payment_method_type_registration',
@@ -120,6 +121,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 						$payment_method_registry->register( new BetterPayment_Credit_Card_Block() );
 						$payment_method_registry->register( new BetterPayment_PayPal_Block() );
 						$payment_method_registry->register( new BetterPayment_AiiaPay_Block() );
+						$payment_method_registry->register( new BetterPayment_Giropay_Block() );
 					}
 				);
 			}
