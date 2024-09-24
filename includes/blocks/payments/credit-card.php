@@ -16,7 +16,7 @@ final class BetterPayment_Credit_Card_Block extends AbstractPaymentMethodType {
 	public function get_payment_method_script_handles() {
 		wp_register_script(
 			'betterpayment_cc-blocks-integration',
-			 plugin_dir_url(__DIR__) . 'assets/js/index.js',
+			 plugin_dir_url(__DIR__) . 'assets/js/credit-card.js',
 			[
 				'wc-blocks-registry',
 				'wc-settings',

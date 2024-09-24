@@ -111,11 +111,13 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 		public function betterpayment_blocks_support() {
 			if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
 				include_once 'includes/blocks/payments/credit-card.php';
+				include_once 'includes/blocks/payments/paypal.php';
 
 				add_action(
 					'woocommerce_blocks_payment_method_type_registration',
 					function( PaymentMethodRegistry $payment_method_registry ) {
 						$payment_method_registry->register( new BetterPayment_Credit_Card_Block() );
+						$payment_method_registry->register( new BetterPayment_PayPal_Block() );
 					}
 				);
 			}
