@@ -12,7 +12,4 @@ window.wc.wcBlocksRegistry.registerPaymentMethod({
     edit: Object( window.wp.element.createElement )( giropayContent, null ),
     canMakePayment: () => true,
     ariaLabel: giropayLabel,
-    // supports: {
-    //     features: settings.supports,
-    // }
 });

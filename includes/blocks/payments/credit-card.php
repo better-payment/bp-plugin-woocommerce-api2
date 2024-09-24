@@ -6,7 +6,7 @@ final class BetterPayment_Credit_Card_Block extends AbstractPaymentMethodType {
 	protected $name = 'betterpayment_cc';
 
 	public function initialize() {
-		$this->settings = get_option( 'woocommerce_betterpayment_cc_settings', [] );
+		$this->settings = get_option( 'woocommerce_' . $this->name . '_settings', [] );
 	}
 
 	public function is_active() {
@@ -15,8 +15,8 @@ final class BetterPayment_Credit_Card_Block extends AbstractPaymentMethodType {
 
 	public function get_payment_method_script_handles() {
 		wp_register_script(
-			'betterpayment_cc-blocks-integration',
-			 plugin_dir_url(__DIR__) . 'assets/js/credit-card.js',
+			$this->name . '-blocks-integration',
+			plugin_dir_url(__DIR__) . 'assets/js/credit-card.js',
 			[
 				'wc-blocks-registry',
 				'wc-settings',
@@ -32,7 +32,7 @@ final class BetterPayment_Credit_Card_Block extends AbstractPaymentMethodType {
 //			wp_set_script_translations( 'betterpayment_cc-blocks-integration');
 //		}
 
-		return [ 'betterpayment_cc-blocks-integration' ];
+		return [ $this->name . '-blocks-integration' ];
 	}
 
 //	public function get_supported_features() {

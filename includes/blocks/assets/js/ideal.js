@@ -12,7 +12,4 @@ window.wc.wcBlocksRegistry.registerPaymentMethod({
     edit: Object( window.wp.element.createElement )( idealContent, null ),
     canMakePayment: () => true,
     ariaLabel: idealLabel,
-    // supports: {
-    //     features: settings.supports,
-    // }
 });

@@ -12,7 +12,4 @@ window.wc.wcBlocksRegistry.registerPaymentMethod({
     edit: Object( window.wp.element.createElement )( paypalContent, null ),
     canMakePayment: () => true,
     ariaLabel: paypalLabel,
-    // supports: {
-    //     features: settings.supports,
-    // }
 });
