@@ -119,6 +119,8 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 				include_once 'includes/blocks/payments/request-to-pay.php';
 				include_once 'includes/blocks/payments/sofort.php';
 
+				include_once 'includes/blocks/payments/invoice.php';
+
 				add_action(
 					'woocommerce_blocks_payment_method_type_registration',
 					function( PaymentMethodRegistry $payment_method_registry ) {
@@ -130,6 +132,8 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 						$payment_method_registry->register( new BetterPayment_PayPal_Block() );
 						$payment_method_registry->register( new BetterPayment_RequestToPay_Block() );
 						$payment_method_registry->register( new BetterPayment_Sofort_Block() );
+
+						$payment_method_registry->register( new BetterPayment_Invoice_Block() );
 					}
 				);
 			}

@@ -82,10 +82,20 @@ if (class_exists('WC_Payment_Gateway')) {
 				} else {
 					$order->update_status( 'failed', $responseBody['error_message'] );
 					wc_add_notice( $responseBody['error_message'], 'error' );
+
+					return [
+						'result'   => 'error',
+						'redirect'  => '',
+					];
 				}
 			} else {
 				$order->update_status( 'failed', 'Payment failed.' );
 				wc_add_notice( 'Connection error.', 'error' );
+
+				return [
+					'result'   => 'error',
+					'redirect'  => '',
+				];
 			}
 		}
 
