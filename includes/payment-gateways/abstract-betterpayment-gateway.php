@@ -20,7 +20,7 @@ if (class_exists('WC_Payment_Gateway')) {
 			}
 		}
 
-		public function process_payment( $order_id ) {
+		public function process_payment( $order_id ): array {
 			$order = wc_get_order($order_id);
 
 			// Check whether b2c or b2b is correctly selected
@@ -30,9 +30,19 @@ if (class_exists('WC_Payment_Gateway')) {
 			else {
 				if ($order->get_billing_company()) {
 					wc_add_notice( 'Please select B2B type payment method', 'error' );
+
+					return [
+						'result'   => 'error',
+						'redirect' => $this->get_return_url( $order )
+					];
 				}
 				else {
 					wc_add_notice( 'Please select non-B2B type payment method', 'error' );
+
+					return [
+						'result'   => 'error',
+						'redirect' => $this->get_return_url( $order )
+					];
 				}
 			}
 		}
@@ -85,7 +95,7 @@ if (class_exists('WC_Payment_Gateway')) {
 
 					return [
 						'result'   => 'error',
-						'redirect'  => '',
+						'redirect'  => $this->get_return_url( $order ),
 					];
 				}
 			} else {
@@ -94,7 +104,7 @@ if (class_exists('WC_Payment_Gateway')) {
 
 				return [
 					'result'   => 'error',
-					'redirect'  => '',
+					'redirect'  => $this->get_return_url( $order ),
 				];
 			}
 		}
