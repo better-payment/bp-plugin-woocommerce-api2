@@ -14,6 +14,14 @@ if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
 			parent::__construct();
 		}
 
+		public function is_available() {
+			$is_available = parent::is_available();
+
+			$company = WC()->customer->get_billing_company();
+
+			return $is_available && !$company;
+		}
+
 		public function init_form_fields() {
 			$this->form_fields = [
 				'enabled' => [

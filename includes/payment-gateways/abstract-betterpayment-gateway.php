@@ -13,6 +13,7 @@ if (class_exists('WC_Payment_Gateway')) {
 
 			$this->enabled = $this->get_option('enabled');
 			$this->title = $this->get_option('title');
+			$this->description = $this->get_option('description');
 
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			if ($this->is_async) {
@@ -21,33 +22,6 @@ if (class_exists('WC_Payment_Gateway')) {
 		}
 
 		public function process_payment( $order_id ): array {
-			$order = wc_get_order($order_id);
-
-			// Check whether b2c or b2b is correctly selected
-			if (($this->is_b2b && $order->get_billing_company()) || (!$this->is_b2b && !$order->get_billing_company())) {
-				return $this->send_payment_request($order_id);
-			}
-			else {
-				if ($order->get_billing_company()) {
-					wc_add_notice( 'Please select B2B type payment method', 'error' );
-
-					return [
-						'result'   => 'error',
-						'redirect' => $this->get_return_url( $order )
-					];
-				}
-				else {
-					wc_add_notice( 'Please select non-B2B type payment method', 'error' );
-
-					return [
-						'result'   => 'error',
-						'redirect' => $this->get_return_url( $order )
-					];
-				}
-			}
-		}
-
-		private function send_payment_request($order_id) {
 			$order = wc_get_order($order_id);
 
 			$url     = Config_Reader::get_api_url() . '/rest/payment';
