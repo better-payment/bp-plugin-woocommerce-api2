@@ -18,7 +18,7 @@ if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
 		public function is_available() {
 			$is_available = parent::is_available();
 
-			$company = WC()->customer->get_billing_company();
+			$company = WC()->customer?->get_billing_company();
 
 			return $is_available && $company;
 		}
