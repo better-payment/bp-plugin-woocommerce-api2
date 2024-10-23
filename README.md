@@ -32,7 +32,7 @@ Make sure you have installed and activated Woo Commerce and then proceed to:
 
 ## Further Notes
 
-**Our plugin currently does not support [Woo Commerce's Block Based Checkouts](https://woocommerce.com/checkout-blocks/). However, this is currently in development and will be released soon.**
+**Our plugin now supports [Woo Commerce's Block Based Checkouts](https://woocommerce.com/checkout-blocks/). In order to use B2B payment methods with checkout blocks, you should enable company field in checkout shipping/billing fields. [Here](https://wordpress.org/support/topic/customize-woo-checkout-blocks/) you can find how to do it.**
 
 ## Support
 

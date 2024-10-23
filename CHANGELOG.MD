@@ -1,5 +1,21 @@
 This changelog follows the specifications of https://keepachangelog.com. Please, follow the specs when adding a new entry
 
+## [1.2.0] - 2024-10-23
+
+### Added
+
+- Support for checkout blocks
+  - Credit Card payments
+  - Direct Debit payments
+  - Invoice payments
+  - Paydirekt payments
+  - Giropay payments
+  - Request to Pay payments
+  - PayPal payments
+  - Sofort payments
+  - Aiia payments
+  - iDEAL payments
+
 ## [1.1.0] - 2024-08-23
 
 ### Added

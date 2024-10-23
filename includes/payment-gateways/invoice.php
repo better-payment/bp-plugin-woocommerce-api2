@@ -22,6 +22,14 @@ if (class_exists( 'Abstract_BetterPayment_Gateway' )) {
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		}
 
+		public function is_available() {
+			$is_available = parent::is_available();
+
+			$company = WC()->customer->get_billing_company();
+
+			return $is_available && !$company;
+		}
+
 		public function init_form_fields() {
 			$this->form_fields = [
 				'enabled' => [
