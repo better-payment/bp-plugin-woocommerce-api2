@@ -9,21 +9,11 @@ final class BetterPayment_Sepa_Direct_Debit_Block extends AbstractPaymentMethodT
 		$this->settings = get_option( 'woocommerce_' . $this->name . '_settings', [] );
 	}
 
-	public function is_active() {
-		return true;
-	}
-
 	public function get_payment_method_script_handles() {
 		wp_register_script(
 			$this->name . '-blocks-integration',
-			 plugin_dir_url(__DIR__) . 'assets/js/sepa-direct-debit.js',
-			[
-				'wc-blocks-registry',
-				'wc-settings',
-				'wp-element',
-				'wp-html-entities',
-				'wp-i18n',
-			],
+			plugin_dir_url(__DIR__) . 'assets/js/sepa-direct-debit.js',
+			[],
 			null,
 			true
 		);
