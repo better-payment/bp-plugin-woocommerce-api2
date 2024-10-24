@@ -19,23 +19,27 @@ const sepaDirectDebitB2BContent = (props) => {
     const [betterpayment_dd_b2b_mandate_agreement, setMandateAgreement] = React.useState(false);
     const [betterpayment_dd_b2b_risk_check_agreement, setRiskCheckAgreement] = React.useState(false);
 
-    // TODO: add check flags to avoid unnecessary data passing
-    React.useEffect( () => {
-        const unsubscribe = onPaymentProcessing( async () => {
+    React.useEffect(() => {
+        const unsubscribe = onPaymentProcessing(async () => {
+            const paymentMethodData = {
+                betterpayment_dd_b2b_iban,
+                betterpayment_dd_b2b_bic,
+                betterpayment_dd_b2b_account_holder,
+                betterpayment_dd_b2b_mandate_reference,
+                betterpayment_dd_b2b_mandate_agreement,
+            };
+
+            if (sepaDirectDebitB2BIsRiskCheckAgreementRequired) {
+                paymentMethodData.betterpayment_dd_b2b_risk_check_agreement = betterpayment_dd_b2b_risk_check_agreement;
+            }
+
             return {
                 type: emitResponse.responseTypes.SUCCESS,
                 meta: {
-                    paymentMethodData: {
-                        betterpayment_dd_b2b_iban,
-                        betterpayment_dd_b2b_bic,
-                        betterpayment_dd_b2b_account_holder,
-                        betterpayment_dd_b2b_mandate_reference,
-                        betterpayment_dd_b2b_mandate_agreement,
-                        betterpayment_dd_b2b_risk_check_agreement,
-                    },
+                    paymentMethodData,
                 },
             };
-        } );
+        });
 
         // Unsubscribes when this component is unmounted.
         return () => {
@@ -44,35 +48,35 @@ const sepaDirectDebitB2BContent = (props) => {
     }, [
         emitResponse.responseTypes.SUCCESS,
         onPaymentProcessing,
-
         betterpayment_dd_b2b_iban,
         betterpayment_dd_b2b_bic,
         betterpayment_dd_b2b_account_holder,
         betterpayment_dd_b2b_mandate_reference,
         betterpayment_dd_b2b_mandate_agreement,
         betterpayment_dd_b2b_risk_check_agreement,
-    ] );
+        sepaDirectDebitB2BIsRiskCheckAgreementRequired,
+    ]);
 
     return React.createElement('div', null,
         React.createElement('div', null,
-            React.createElement('label', {htmlFor: 'iban'}, 'IBAN: '),
-            React.createElement('input', {type: 'text', id: 'betterpayment_dd_b2b_iban', value: betterpayment_dd_b2b_iban, onChange: (event) => { setIban(event.target.value); } } ),
+            React.createElement('label', { htmlFor: 'iban' }, 'IBAN: '),
+            React.createElement('input', { type: 'text', id: 'betterpayment_dd_b2b_iban', value: betterpayment_dd_b2b_iban, onChange: (event) => { setIban(event.target.value); }}),
             React.createElement('br'),
-            React.createElement('label', {htmlFor: 'bic'}, 'BIC (optional): '),
-            React.createElement('input', {type: 'text', id: 'betterpayment_dd_b2b_bic', value: betterpayment_dd_b2b_bic, onChange: (event) => { setBic(event.target.value); } } ),
+            React.createElement('label', { htmlFor: 'bic' }, 'BIC (optional): '),
+            React.createElement('input', { type: 'text', id: 'betterpayment_dd_b2b_bic', value: betterpayment_dd_b2b_bic, onChange: (event) => { setBic(event.target.value); }}),
             React.createElement('br'),
-            React.createElement('span', { dangerouslySetInnerHTML: { __html: sepaDirectDebitB2BMandateDescription } } ),
+            React.createElement('span', { dangerouslySetInnerHTML: { __html: sepaDirectDebitB2BMandateDescription }}),
             React.createElement('div', null,
-                React.createElement('input', { type: 'checkbox', id: 'betterpayment_dd_b2b_mandate_agreement', checked: betterpayment_dd_b2b_mandate_agreement, onChange: (event) => { setMandateAgreement(event.target.checked); } }),
+                React.createElement('input', { type: 'checkbox', id: 'betterpayment_dd_b2b_mandate_agreement', checked: betterpayment_dd_b2b_mandate_agreement, onChange: (event) => { setMandateAgreement(event.target.checked); }}),
                 React.createElement('label', { htmlFor: 'mandate_agreement' }, 'I agree to the following mandate')
             )
         ),
         sepaDirectDebitB2BIsRiskCheckAgreementRequired && React.createElement('div', null,
             React.createElement('h4', null, 'Risk check information'),
-            React.createElement('input', { type: 'checkbox', id: 'betterpayment_dd_b2b_risk_check_agreement', checked: betterpayment_dd_b2b_risk_check_agreement, onChange: (event) => { setRiskCheckAgreement(event.target.checked); }, className: ''}),
+            React.createElement('input', { type: 'checkbox', id: 'betterpayment_dd_b2b_risk_check_agreement', checked: betterpayment_dd_b2b_risk_check_agreement, onChange: (event) => { setRiskCheckAgreement(event.target.checked); }}),
             React.createElement('label', { htmlFor: 'agree' }, 'Agree risk check processing')
         )
-        )
+    );
 };
 
 window.wc.wcBlocksRegistry.registerPaymentMethod({

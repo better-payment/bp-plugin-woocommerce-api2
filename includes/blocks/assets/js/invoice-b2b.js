@@ -9,18 +9,21 @@ const invoiceB2BContent = (props) => {
 
     const [betterpayment_kar_b2b_risk_check_agreement, setRiskCheckAgreement] = React.useState(false);
 
-    // TODO: add check flags to avoid unnecessary data passing
-    React.useEffect( () => {
-        const unsubscribe = onPaymentProcessing( async () => {
+    React.useEffect(() => {
+        const unsubscribe = onPaymentProcessing(async () => {
+            const paymentMethodData = {};
+
+            if (invoiceB2BIsRiskCheckAgreementRequired) {
+                paymentMethodData.betterpayment_kar_b2b_risk_check_agreement = betterpayment_kar_b2b_risk_check_agreement;
+            }
+
             return {
                 type: emitResponse.responseTypes.SUCCESS,
                 meta: {
-                    paymentMethodData: {
-                        betterpayment_kar_b2b_risk_check_agreement
-                    },
+                    paymentMethodData,
                 },
             };
-        } );
+        });
 
         // Unsubscribes when this component is unmounted.
         return () => {
@@ -30,11 +33,13 @@ const invoiceB2BContent = (props) => {
         emitResponse.responseTypes.SUCCESS,
         onPaymentProcessing,
         betterpayment_kar_b2b_risk_check_agreement,
-    ] );
+        invoiceB2BIsRiskCheckAgreementRequired
+    ]);
 
     return invoiceB2BIsRiskCheckAgreementRequired && React.createElement('div', null,
-                React.createElement('input', { type: 'checkbox', id: 'betterpayment_kar_b2b_risk_check_agreement', name: 'betterpayment_kar_b2b_risk_check_agreement', required: true, value: betterpayment_kar_b2b_risk_check_agreement, onChange: (event) => { setRiskCheckAgreement(event.target.checked); }, className: ''}),
-                React.createElement('label', { htmlFor: 'agree' }, 'Agree risk check processing'))
+        React.createElement('input', { type: 'checkbox', id: 'betterpayment_kar_b2b_risk_check_agreement', value: betterpayment_kar_b2b_risk_check_agreement, onChange: (event) => { setRiskCheckAgreement(event.target.checked); } }),
+        React.createElement('label', { htmlFor: 'agree' }, 'Agree risk check processing')
+    );
 };
 
 window.wc.wcBlocksRegistry.registerPaymentMethod({

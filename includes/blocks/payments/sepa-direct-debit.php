@@ -18,6 +18,10 @@ final class BetterPayment_Sepa_Direct_Debit_Block extends AbstractPaymentMethodT
 			true
 		);
 
+		wp_localize_script($this->name . '-blocks-integration', 'i10n', [
+			'gender' => __( 'Gender', 'bp-plugin-woocommerce-api2' ),
+		]);
+
 		return [ $this->name . '-blocks-integration' ];
 	}
 
