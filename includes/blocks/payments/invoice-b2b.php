@@ -18,6 +18,10 @@ final class BetterPayment_Invoice_B2B_Block extends AbstractPaymentMethodType {
 			true
 		);
 
+		wp_localize_script($this->name . '-blocks-integration', $this->name . '_i10n', [
+			'label_risk_check_agreement' => __('Agree to risk check processing', 'bp-plugin-woocommerce-api2')
+		]);
+
 		return [ $this->name . '-blocks-integration' ];
 	}
 

@@ -38,7 +38,7 @@ const invoiceB2BContent = (props) => {
 
     return invoiceB2BIsRiskCheckAgreementRequired && React.createElement('div', null,
         React.createElement('input', { type: 'checkbox', id: 'betterpayment_kar_b2b_risk_check_agreement', value: betterpayment_kar_b2b_risk_check_agreement, onChange: (event) => { setRiskCheckAgreement(event.target.checked); } }),
-        React.createElement('label', { htmlFor: 'agree' }, 'Agree risk check processing')
+        React.createElement('label', { htmlFor: 'betterpayment_kar_b2b_risk_check_agreement' }, betterpayment_kar_b2b_i10n.label_risk_check_agreement)
     );
 };
 
