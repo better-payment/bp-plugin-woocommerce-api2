@@ -76,34 +76,38 @@ const sepaDirectDebitContent = (props) => {
 
     return React.createElement('div', null,
         React.createElement('div', null,
-            React.createElement('label', { htmlFor: 'iban' }, 'IBAN: '),
+            React.createElement('label', { htmlFor: 'betterpayment_dd_iban' }, betterpayment_dd_i10n.label_iban),
+            React.createElement('br'),
             React.createElement('input', { type: 'text', id: 'betterpayment_dd_iban', value: betterpayment_dd_iban, onChange: (event) => { setIban(event.target.value); } }),
             React.createElement('br'),
-            React.createElement('label', { htmlFor: 'bic' }, 'BIC (optional): '),
+            React.createElement('label', { htmlFor: 'betterpayment_dd_bic' }, betterpayment_dd_i10n.label_bic),
+            React.createElement('br'),
             React.createElement('input', { type: 'text', id: 'betterpayment_dd_bic', value: betterpayment_dd_bic, onChange: (event) => { setBic(event.target.value); } }),
             React.createElement('br'),
             React.createElement('span', { dangerouslySetInnerHTML: { __html: sepaDirectDebitMandateDescription } }),
             React.createElement('div', null,
                 React.createElement('input', { type: 'checkbox', id: 'betterpayment_dd_mandate_agreement', checked: betterpayment_dd_mandate_agreement, onChange: (event) => { setMandateAgreement(event.target.checked); } }),
-                React.createElement('label', { htmlFor: 'mandate_agreement' }, 'I agree to the following mandate')
+                React.createElement('label', { htmlFor: 'betterpayment_dd_mandate_agreement' }, betterpayment_dd_i10n.label_mandate_agreement)
             )
         ),
         (sepaDirectDebitIsGenderCollected || sepaDirectDebitIsDateOfBirthCollected || sepaDirectDebitIsRiskCheckAgreementRequired) &&
-        React.createElement('h4', null, 'Risk check information'),
+        React.createElement('h4', null, betterpayment_dd_i10n.label_risk_check_information),
         sepaDirectDebitIsGenderCollected && React.createElement('div', null,
-            React.createElement('label', { htmlFor: 'betterpayment_dd_gender' }, i10n.gender),
+            React.createElement('label', { htmlFor: 'betterpayment_dd_gender' }, betterpayment_dd_i10n.label_gender),
+            React.createElement('br'),
             React.createElement(
                 'select',
                 { id: 'betterpayment_dd_gender', value: betterpayment_dd_gender, onChange: (event) => { setGender(event.target.value); }},
-                React.createElement('option', { value: '' }, 'Select...'),
-                React.createElement('option', { value: 'm' }, 'Male'),
-                React.createElement('option', { value: 'f' }, 'Female'),
-                React.createElement('option', { value: 'd' }, 'Diverse'),
+                React.createElement('option', { value: '' }, betterpayment_dd_i10n.option_select),
+                React.createElement('option', { value: 'm' }, betterpayment_dd_i10n.option_male),
+                React.createElement('option', { value: 'f' }, betterpayment_dd_i10n.option_female),
+                React.createElement('option', { value: 'd' }, betterpayment_dd_i10n.option_diverse),
             )
         ),
 
         sepaDirectDebitIsDateOfBirthCollected && React.createElement('div', null,
-            React.createElement('label', { htmlFor: 'betterpayment_dd_date_of_birth' }, 'Date of birth: '),
+            React.createElement('label', { htmlFor: 'betterpayment_dd_date_of_birth' }, betterpayment_dd_i10n.label_date_of_birth),
+            React.createElement('br'),
             React.createElement(
                 'input',
                 { type: 'date', id: 'betterpayment_dd_date_of_birth', value: betterpayment_dd_date_of_birth, onChange: (event) => { setDateOfBirth(event.target.value); }},
@@ -112,7 +116,7 @@ const sepaDirectDebitContent = (props) => {
 
         sepaDirectDebitIsRiskCheckAgreementRequired && React.createElement('div', null,
             React.createElement('input', { type: 'checkbox', id: 'betterpayment_dd_risk_check_agreement', checked: betterpayment_dd_risk_check_agreement, onChange: (event) => { setRiskCheckAgreement(event.target.checked); }}),
-            React.createElement('label', { htmlFor: 'agree' }, 'Agree risk check processing')
+            React.createElement('label', { htmlFor: 'betterpayment_dd_risk_check_agreement' }, betterpayment_dd_i10n.label_risk_check_agreement)
         )
     );
 };
