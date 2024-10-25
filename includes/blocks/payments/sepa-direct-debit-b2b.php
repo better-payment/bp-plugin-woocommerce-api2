@@ -18,7 +18,7 @@ final class BetterPayment_Sepa_Direct_Debit_B2B_Block extends AbstractPaymentMet
 			true
 		);
 
-		wp_localize_script($this->name . '-blocks-integration', $this->name . '_i10n', [
+		wp_localize_script($this->name . '-blocks-integration', $this->name . '_l10n', [
 			'label_iban' => __('IBAN', 'bp-plugin-woocommerce-api2'),
 			'label_bic' => __('BIC', 'bp-plugin-woocommerce-api2'),
 			'label_mandate_agreement' => __('I agree to the following mandate', 'bp-plugin-woocommerce-api2'),

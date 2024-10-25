@@ -18,7 +18,7 @@ final class BetterPayment_Invoice_Block extends AbstractPaymentMethodType {
 			true
 		);
 
-		wp_localize_script($this->name . '-blocks-integration', $this->name . '_i10n', [
+		wp_localize_script($this->name . '-blocks-integration', $this->name . '_l10n', [
 			'label_risk_check_information' => __('Risk check information', 'bp-plugin-woocommerce-api2'),
 			'label_gender' => __('Gender', 'bp-plugin-woocommerce-api2'),
 			'option_select' => __('Select...', 'bp-plugin-woocommerce-api2'),
