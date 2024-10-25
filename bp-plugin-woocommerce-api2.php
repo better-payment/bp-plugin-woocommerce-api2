@@ -3,7 +3,7 @@
  * Plugin Name: Better Payment WooCommerce Extension
  * Plugin URI: https://github.com/better-payment/bp-plugin-woocommerce-api2
  * Description: Better Payment plugin to implement payment methods using API2
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Better Payment
  * Author URI: https://betterpayment.de
  * Text Domain: bp-plugin-woocommerce-api2
@@ -11,6 +11,9 @@
  */
 
 //defined( 'ABSPATH' ) || exit;
+
+use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
 
 if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 	class WC_BetterPayment_Plugin {
@@ -27,6 +30,8 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			});
 
 			add_action( 'plugins_loaded', array( $this, 'init' ) );
+			add_action( 'before_woocommerce_init', array( $this, 'declare_cart_checkout_blocks_compatibility' ) );
+			add_action( 'woocommerce_blocks_loaded', array( $this, 'betterpayment_blocks_support' ) );
 		}
 
 		/**
@@ -95,6 +100,49 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			$methods[] = 'BetterPayment_Invoice_B2B';
 
 			return $methods;
+		}
+
+		public function declare_cart_checkout_blocks_compatibility() {
+			if (class_exists('\Automattic\WooCommerce\Utilities\FeaturesUtil')) {
+				FeaturesUtil::declare_compatibility('cart_checkout_blocks', __FILE__, true);
+			}
+		}
+
+		public function betterpayment_blocks_support() {
+			if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+				include_once 'includes/blocks/payments/aiia-pay.php';
+				include_once 'includes/blocks/payments/credit-card.php';
+				include_once 'includes/blocks/payments/giropay.php';
+				include_once 'includes/blocks/payments/ideal.php';
+				include_once 'includes/blocks/payments/paydirekt.php';
+				include_once 'includes/blocks/payments/paypal.php';
+				include_once 'includes/blocks/payments/request-to-pay.php';
+				include_once 'includes/blocks/payments/sofort.php';
+
+				include_once 'includes/blocks/payments/invoice.php';
+				include_once 'includes/blocks/payments/invoice-b2b.php';
+				include_once 'includes/blocks/payments/sepa-direct-debit.php';
+				include_once 'includes/blocks/payments/sepa-direct-debit-b2b.php';
+
+				add_action(
+					'woocommerce_blocks_payment_method_type_registration',
+					function( PaymentMethodRegistry $payment_method_registry ) {
+						$payment_method_registry->register( new BetterPayment_AiiaPay_Block() );
+						$payment_method_registry->register( new BetterPayment_Credit_Card_Block() );
+						$payment_method_registry->register( new BetterPayment_Giropay_Block() );
+						$payment_method_registry->register( new BetterPayment_Ideal_Block() );
+						$payment_method_registry->register( new BetterPayment_Paydirekt_Block() );
+						$payment_method_registry->register( new BetterPayment_PayPal_Block() );
+						$payment_method_registry->register( new BetterPayment_RequestToPay_Block() );
+						$payment_method_registry->register( new BetterPayment_Sofort_Block() );
+
+						$payment_method_registry->register( new BetterPayment_Invoice_Block() );
+						$payment_method_registry->register( new BetterPayment_Invoice_B2B_Block() );
+						$payment_method_registry->register( new BetterPayment_Sepa_Direct_Debit_Block() );
+						$payment_method_registry->register( new BetterPayment_Sepa_Direct_Debit_B2B_Block() );
+					}
+				);
+			}
 		}
 	}
 }
