@@ -18,6 +18,17 @@ final class BetterPayment_Invoice_Block extends AbstractPaymentMethodType {
 			true
 		);
 
+		wp_localize_script($this->name . '-blocks-integration', $this->name . '_i10n', [
+			'label_risk_check_information' => __('Risk check information', 'bp-plugin-woocommerce-api2'),
+			'label_gender' => __('Gender', 'bp-plugin-woocommerce-api2'),
+			'option_select' => __('Select...', 'bp-plugin-woocommerce-api2'),
+			'option_male' => __('Male', 'bp-plugin-woocommerce-api2'),
+			'option_female' => __('Female', 'bp-plugin-woocommerce-api2'),
+			'option_diverse' => __('Diverse', 'bp-plugin-woocommerce-api2'),
+			'label_date_of_birth' => __('Date of birth', 'bp-plugin-woocommerce-api2'),
+			'label_risk_check_agreement' => __('Agree to risk check processing', 'bp-plugin-woocommerce-api2'),
+		]);
+
 		return [ $this->name . '-blocks-integration' ];
 	}
 

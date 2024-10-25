@@ -55,31 +55,33 @@ const invoiceContent = (props) => {
 
     return (invoiceIsGenderCollected || invoiceIsDateOfBirthCollected || invoiceIsRiskCheckAgreementRequired) &&
         React.createElement('div', null,
-            React.createElement('h4', null, 'Risk check information'),
-
-            invoiceIsGenderCollected && React.createElement('div', null,
-                React.createElement('label', {htmlFor: 'betterpayment_kar_gender'}, 'Gender: '),
-                React.createElement(
-                    'select',
-                    {id: 'betterpayment_kar_gender', value: betterpayment_kar_gender, onChange: (event) => { setGender(event.target.value); } },
-                    React.createElement('option', {value: ''}, 'Select...'),
-                    React.createElement('option', {value: 'm'}, 'male'),
-                    React.createElement('option', {value: 'f'}, 'female'),
-                    React.createElement('option', {value: 'd'}, 'diverse'),
-                )
-            ),
+            React.createElement('h4', null, betterpayment_kar_i10n.label_risk_check_information),
 
             invoiceIsDateOfBirthCollected && React.createElement('div', null,
-                React.createElement('label', {htmlFor: 'betterpayment_kar_date_of_birth'}, 'Date of birth: '),
+                React.createElement('label', {htmlFor: 'betterpayment_kar_date_of_birth'}, betterpayment_kar_i10n.label_date_of_birth),
+                React.createElement('br'),
                 React.createElement(
                     'input',
                     {type: 'date', id: 'betterpayment_kar_date_of_birth', value: betterpayment_kar_date_of_birth, onChange: (event) => { setDateOfBirth(event.target.value); } },
                 )
             ),
 
+            invoiceIsGenderCollected && React.createElement('div', null,
+                React.createElement('label', {htmlFor: 'betterpayment_kar_gender'}, betterpayment_kar_i10n.label_gender),
+                React.createElement('br'),
+                React.createElement(
+                    'select',
+                    {id: 'betterpayment_kar_gender', value: betterpayment_kar_gender, onChange: (event) => { setGender(event.target.value); } },
+                    React.createElement('option', {value: ''}, betterpayment_kar_i10n.option_select),
+                    React.createElement('option', {value: 'm'}, betterpayment_kar_i10n.option_male),
+                    React.createElement('option', {value: 'f'}, betterpayment_kar_i10n.option_female),
+                    React.createElement('option', {value: 'd'}, betterpayment_kar_i10n.option_diverse),
+                )
+            ),
+
             invoiceIsRiskCheckAgreementRequired && React.createElement('div', null,
                 React.createElement('input', { type: 'checkbox', id: 'betterpayment_kar_risk_check_agreement', value: betterpayment_kar_risk_check_agreement, onChange: (event) => { setRiskCheckAgreement(event.target.checked); } } ),
-                React.createElement('label', { htmlFor: 'agree' }, 'Agree risk check processing')
+                React.createElement('label', { htmlFor: 'betterpayment_kar_risk_check_agreement' }, betterpayment_kar_i10n.label_risk_check_agreement)
             )
         );
 };
