@@ -112,7 +112,7 @@ if (class_exists('WC_Payment_Gateway')) {
 				// always enabled
 				'risk_check_approval' => '1',
 				// The URL for updates about transaction status are posted
-				'postback_url' => set_url_scheme(get_rest_url(path: 'betterpayment/webhook'), 'https'),
+				'postback_url' => Config_Reader::get_postback_url(),
 				// Any alphanumeric string to identify the Merchant’s order
 				'order_id' => $order->get_order_number(),
 				// Any alphanumeric string to provide the customer number of a Merchant’s order (up to 40 characters) for factoring or debt collection

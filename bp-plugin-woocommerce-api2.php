@@ -56,14 +56,18 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			include_once 'includes/payment-gateways/sepa-direct-debit-b2b.php';
 			include_once 'includes/payment-gateways/invoice.php';
 			include_once 'includes/payment-gateways/invoice-b2b.php';
+			include_once 'includes/payment-gateways/apple-pay.php';
+
 			// Register payment methods
 			add_filter('woocommerce_payment_gateways', array($this, 'add_betterpayment_gateways'));
 
 			// Include helpers
 			include_once 'includes/helpers/config-reader.php';
 
-			// Include webhook route endpoint
-			include_once 'includes/webhook.php';
+			// Include custom endpoints
+			include_once 'includes/api/webhook.php';
+			include_once 'includes/api/apple-pay-session.php';
+			include_once 'includes/api/betterpayment-payment-request.php';
 
 			// Load translations
 			load_plugin_textdomain( 'bp-plugin-woocommerce-api2', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
@@ -98,6 +102,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			$methods[] = 'BetterPayment_Sepa_Direct_Debit_B2B';
 			$methods[] = 'BetterPayment_Invoice';
 			$methods[] = 'BetterPayment_Invoice_B2B';
+			$methods[] = 'BetterPayment_Apple_Pay';
 
 			return $methods;
 		}
@@ -124,6 +129,8 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 				include_once 'includes/blocks/payments/sepa-direct-debit.php';
 				include_once 'includes/blocks/payments/sepa-direct-debit-b2b.php';
 
+				include_once 'includes/blocks/payments/apple-pay.php';
+
 				add_action(
 					'woocommerce_blocks_payment_method_type_registration',
 					function( PaymentMethodRegistry $payment_method_registry ) {
@@ -140,6 +147,8 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 						$payment_method_registry->register( new BetterPayment_Invoice_B2B_Block() );
 						$payment_method_registry->register( new BetterPayment_Sepa_Direct_Debit_Block() );
 						$payment_method_registry->register( new BetterPayment_Sepa_Direct_Debit_B2B_Block() );
+
+						$payment_method_registry->register( new BetterPayment_ApplePay_Block() );
 					}
 				);
 			}
