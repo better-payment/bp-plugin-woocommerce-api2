@@ -14,18 +14,12 @@ const REQUIRED_CONTACT_FIELDS = [
 ];
 
 const ApplePayButton = (props) => {
-    const { onClick, onSubmit, eventRegistration, emitResponse, billing, shippingData} = props;
+    const { onClick, onClose, onSubmit, eventRegistration, emitResponse, billing, shippingData} = props;
     const { onPaymentProcessing } = eventRegistration;
     const { billingAddress } = billing;
     const { shippingAddress } = shippingData;
     const { data } = window.wp;
     const { CART_STORE_KEY, CHECKOUT_STORE_KEY } = window.wc.wcBlocksData;
-
-    const cartTotals = data.select(CART_STORE_KEY).getCartTotals();
-    const currency = cartTotals.currency_code;
-    const totalAmount = cartTotals.total_price / 100;
-    const totalShipping = cartTotals.total_shipping / 100;
-    const totalTax = cartTotals.total_tax / 100;
 
     const buttonRef = React.useRef(null);
     const initApplePay = async () => {
@@ -34,17 +28,23 @@ const ApplePayButton = (props) => {
         // Which will signal to checkout the payment method has taken over payment processing
         onClick();
 
+        const cartTotals = data.select(CART_STORE_KEY).getCartTotals();
+        const currency = cartTotals.currency_code;
+        const totalAmount = cartTotals.total_price / 100;
+        const totalShipping = cartTotals.total_shipping / 100;
+        const totalTax = cartTotals.total_tax / 100;
+
         if (!ApplePaySession) {
+            onClose();
             return;
         }
 
         try {
             const requestBody = {
-                countryCode: "DE",
+                countryCode: initialData.country ?? "DE",
                 currencyCode: currency,
-                // TODO in the next release we will dynamically pass these values from BE
-                merchantCapabilities: ["supports3DS"],
-                supportedNetworks: ["visa", "masterCard"],
+                merchantCapabilities: applePayData.supports3DS ? ["supports3DS"] : [],
+                supportedNetworks: applePayData.supportedNetworks,
                 total: {
                     label: orderDescription,
                     amount: totalAmount,
@@ -172,6 +172,8 @@ const ApplePayButton = (props) => {
                         session.completePayment({
                             status: ApplePaySession.STATUS_FAILURE
                         });
+
+                        onClose();
                     }
                 }
                 else {
@@ -182,16 +184,18 @@ const ApplePayButton = (props) => {
                     session.completePayment({
                         status: ApplePaySession.STATUS_FAILURE
                     });
+
+                    onClose();
                 }
             };
 
             session.oncancel = (event) => {
-                console.error(event);
+                onClose();
             };
 
             session.begin();
         } catch (e) {
-            console.error(e);
+            onClose();
         }
     }
 
@@ -226,8 +230,8 @@ const ApplePayButton = (props) => {
                 type: emitResponse.responseTypes.SUCCESS,
                 meta: {
                     paymentMethodData: {
-                        transaction_id: transaction_id,
-                        transaction_status: transaction_status,
+                        transaction_id: transaction_id ?? '',
+                        transaction_status: transaction_status ?? '',
                     },
                 },
             };
@@ -264,14 +268,13 @@ const ApplePayButton = (props) => {
 
 window.wc.wcBlocksRegistry.registerExpressPaymentMethod({
     name: 'betterpayment_applepay',
-    // title: 'My Mayment Method',
-    // description: 'A setence or two about your payment method',
-    // label: 'label',
-    content: React.createElement(ApplePayButton),
-    edit: React.createElement(ApplePayButton),
+    paymentMethodId: 'betterpayment_applepay',
+    title: applePayData.title,
+    description: applePayData.description,
+    content: Object( window.wp.element.createElement )( ApplePayButton, null ),
+    edit: Object( window.wp.element.createElement )( ApplePayButton, null ),
     canMakePayment: () => true,
-    // gatewayId: 'gateway-id',
-    // paymentMethodId: 'my_payment_method',
+    // gatewayId: 'betterpayment_applepay',
     // ariaLabel: applePayLabel,
     // supports: {
     //     features: [],

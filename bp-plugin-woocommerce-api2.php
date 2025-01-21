@@ -44,6 +44,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			add_filter( 'woocommerce_integrations', array( $this, 'add_integration' ) );
 
 			// Include payment methods
+			include_once 'includes/payment-gateways/abstract-betterpayment-gateway.php';
 			include_once 'includes/payment-gateways/credit-card.php';
 			include_once 'includes/payment-gateways/paypal.php';
 			include_once 'includes/payment-gateways/paydirekt.php';
