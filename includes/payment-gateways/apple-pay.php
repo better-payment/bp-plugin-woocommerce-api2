@@ -12,10 +12,12 @@ class BetterPayment_Apple_Pay extends Abstract_BetterPayment_Gateway {
 	}
 
 	// Apple Pay is not available in shortcode (legacy) checkout
-//	public function is_available() {
-//		return WC_Blocks_Utils::has_block_in_page(get_the_ID(), 'woocommerce/checkout')
-//		       || WC_Blocks_Utils::has_block_in_page(get_the_ID(), 'woocommerce/cart');
-//	}
+	public function is_available(): bool {
+		if (is_checkout() && !WC_Blocks_Utils::has_block_in_page(get_the_ID(), 'woocommerce/checkout'))
+			return false;
+
+		return true;
+	}
 
 	public function init_form_fields() {
 		$this->form_fields = [

@@ -28,8 +28,6 @@ final class BetterPayment_ApplePay_Block extends AbstractPaymentMethodType {
 					$order->set_transaction_id($context->payment_data['transaction_id']);
 					$order->save();
 
-					error_log(print_r($order, true));
-
 					$transaction_status = $context->payment_data['transaction_status'];
 
 					// Map status from Better Payment to WooCommerce
