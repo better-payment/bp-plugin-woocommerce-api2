@@ -7,9 +7,13 @@ add_action('rest_api_init', function () {
 	));
 });
 
+// Only used for Apple Pay
 function payment(WP_REST_Request $request): WP_REST_Response {
 	$url     = Config_Reader::get_api_url() . '/rest/payment';
 	$body    = $request->get_body();
+
+	// TODO: Pass payment type here = applepay
+
 	$headers = [
 		'Content-Type'  => 'application/json',
 		'Authorization' => 'Basic ' . base64_encode( Config_Reader::get_api_key() . ':' . Config_Reader::get_outgoing_key() )

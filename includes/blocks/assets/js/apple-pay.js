@@ -9,7 +9,6 @@ const APPLE_PAY_JS_API_VERSION = 14;
 const REQUIRED_CONTACT_FIELDS = [
     "postalAddress",
     "email",
-    "name",
     "phone",
 ];
 
@@ -225,6 +224,8 @@ const ApplePayButton = (props) => {
             button.addEventListener('click', initApplePay);
         }
 
+        // TODO: Make it specific to Apple Pay
+        // passes following metadata in other checkout payment methods (i.e. Credit Card)
         const unsubscribe = onPaymentProcessing(async () => {
             return {
                 type: emitResponse.responseTypes.SUCCESS,
@@ -232,6 +233,7 @@ const ApplePayButton = (props) => {
                     paymentMethodData: {
                         transaction_id: transaction_id ?? '',
                         transaction_status: transaction_status ?? '',
+                        apple_pay_order_id: initialData.order_id,
                     },
                 },
             };
@@ -252,6 +254,7 @@ const ApplePayButton = (props) => {
         onPaymentProcessing,
     ]);
 
+    // TODO: Hide Apple Pay button when unable to generate Apple Pay merchant session
     // Render the <apple-pay-button> element
     return React.createElement(
         'apple-pay-button',
@@ -274,10 +277,4 @@ window.wc.wcBlocksRegistry.registerExpressPaymentMethod({
     content: Object( window.wp.element.createElement )( ApplePayButton, null ),
     edit: Object( window.wp.element.createElement )( ApplePayButton, null ),
     canMakePayment: () => true,
-    // gatewayId: 'betterpayment_applepay',
-    // ariaLabel: applePayLabel,
-    // supports: {
-    //     features: [],
-    //     style: [],
-    // },
 });

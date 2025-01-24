@@ -10,7 +10,10 @@ final class BetterPayment_ApplePay_Block extends AbstractPaymentMethodType {
 	public function initialize() {
 		$this->settings = get_option( 'woocommerce_' . $this->name . '_settings', [] );
 
-		// Bypass postcode and city validations
+		// Bypass postcode and city validations.
+		// Because default woocommerce checkout form requires postcode and city fields being mandatory,
+		// while Apple Pay billing/shipping addresses doesn't require them to be mandatory fields
+		// https://developer.apple.com/documentation/apple_pay_on_the_web/applepaycontactfield
 		add_filter('woocommerce_validate_postcode', '__return_true');
 		add_filter('woocommerce_default_address_fields', function ($fields) {
 			$fields['postcode']['required'] = false;
@@ -26,6 +29,7 @@ final class BetterPayment_ApplePay_Block extends AbstractPaymentMethodType {
 					// If the logic above was successful, we can set the status to success.
 					$order = $context->order;
 					$order->set_transaction_id($context->payment_data['transaction_id']);
+					$order->update_meta_data('apple_pay_order_id', $context->payment_data['apple_pay_order_id']);
 					$order->save();
 
 					$transaction_status = $context->payment_data['transaction_status'];
@@ -78,8 +82,7 @@ final class BetterPayment_ApplePay_Block extends AbstractPaymentMethodType {
 			'supportedNetworks' => $this->get_setting( 'supported_networks' ),
 			'initial_data' => [
 				'country' => WC()->countries->get_base_country(),
-				// TODO: fetch dynamically
-				'order_id' => '00001',
+				'order_id' => wp_generate_uuid4(),
 				'customer_id' => WC()->customer->get_id(),
 				'customer_ip' => WC_Geolocation::get_ip_address(),
 				'shop_name' => get_bloginfo('name'),
