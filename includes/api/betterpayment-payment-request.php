@@ -10,9 +10,10 @@ add_action('rest_api_init', function () {
 // Only used for Apple Pay
 function payment(WP_REST_Request $request): WP_REST_Response {
 	$url     = Config_Reader::get_api_url() . '/rest/payment';
-	$body    = $request->get_body();
+	$body    = $request->get_body_params();
 
-	// TODO: Pass payment type here = applepay
+	// Add the payment type to the body
+	$body['payment_type'] = 'applepay';
 
 	$headers = [
 		'Content-Type'  => 'application/json',
@@ -21,7 +22,7 @@ function payment(WP_REST_Request $request): WP_REST_Response {
 
 	$response = wp_remote_post( $url, [
 		'headers' => $headers,
-		'body'    => $body,
+		'body'    => wp_json_encode($body),
 	] );
 
 	return new WP_REST_Response(wp_remote_retrieve_body($response), wp_remote_retrieve_response_code($response));

@@ -107,7 +107,6 @@ const ApplePayButton = (props) => {
 
                 const payload = {
                     // common parameters
-                    payment_type: "applepay",
                     applepay_token: btoa(JSON.stringify(event.payment?.token)),
                     amount: totalAmount,
                     currency: currency,
