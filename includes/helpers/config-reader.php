@@ -17,6 +17,11 @@ class Config_Reader {
 		return 'WooCommerce ' . $woocommerce->version . ', Plugin ' . $plugin_data['Version'];
 	}
 
+	public static function get_postback_url(): string
+	{
+		return set_url_scheme(get_rest_url(path: 'betterpayment/webhook'), 'https');
+	}
+
 	public static function get_api_url() {
 		$settings = get_option('woocommerce_betterpayment_settings');
 		$api_url = $settings['environment'] == 'test' ? $settings['testAPIUrl'] : $settings['productionAPIUrl'];
