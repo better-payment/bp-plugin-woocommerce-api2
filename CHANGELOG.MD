@@ -1,5 +1,12 @@
 This changelog follows the specifications of https://keepachangelog.com. Please, follow the specs when adding a new entry
 
+## [1.3.1] - 2025-03-06
+
+### Fixed
+
+- Warning and errors appeared during adjustment for WC version 9.7.0
+
+
 ## [1.3.0] - 2025-01-24
 
 ### Added
