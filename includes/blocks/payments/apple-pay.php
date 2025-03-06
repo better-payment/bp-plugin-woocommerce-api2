@@ -83,7 +83,7 @@ final class BetterPayment_ApplePay_Block extends AbstractPaymentMethodType {
 			'initial_data' => [
 				'country' => WC()->countries->get_base_country(),
 				'order_id' => wp_generate_uuid4(),
-				'customer_id' => WC()->customer->get_id(),
+				'customer_id' => WC()->customer?->get_id(),
 				'customer_ip' => WC_Geolocation::get_ip_address(),
 				'shop_name' => get_bloginfo('name'),
 				'postback_url' => Config_Reader::get_postback_url(),
