@@ -3,7 +3,7 @@
  * Plugin Name: Better Payment WooCommerce Extension
  * Plugin URI: https://github.com/better-payment/bp-plugin-woocommerce-api2
  * Description: Better Payment plugin to implement payment methods using API2
- * Version: 1.3.0
+ * Version: 1.3.1
  * Author: Better Payment
  * Author URI: https://betterpayment.de
  * Text Domain: bp-plugin-woocommerce-api2
