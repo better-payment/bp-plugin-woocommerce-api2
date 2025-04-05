@@ -146,6 +146,9 @@ const ApplePayButton = (props) => {
                 const response = await fetch('/wp-json/betterpayment/payment', {
                     method: 'POST',
                     body: JSON.stringify(payload),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 });
 
                 if (response.ok) {
@@ -208,8 +211,8 @@ const ApplePayButton = (props) => {
         const style = document.createElement('style');
         style.textContent = `
             apple-pay-button {
-                --apple-pay-button-width: 150px;
-                --apple-pay-button-height: 30px;
+                --apple-pay-button-width: 240px;
+                --apple-pay-button-height: 40px;
                 --apple-pay-button-border-radius: 3px;
                 --apple-pay-button-padding: 0px 0px;
                 --apple-pay-button-box-sizing: border-box;

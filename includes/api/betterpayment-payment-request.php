@@ -10,10 +10,9 @@ add_action('rest_api_init', function () {
 // Only used for Apple Pay
 function payment(WP_REST_Request $request): WP_REST_Response {
 	$url     = Config_Reader::get_api_url() . '/rest/payment';
-	$body    = $request->get_body_params();
-
+	$body    = $request->get_json_params();
 	// Add the payment type to the body
-	$body['payment_type'] = 'applepay';
+	$body['payment_type'] = $body['googlepay_token'] ? 'googlepay' : 'applepay';
 
 	$headers = [
 		'Content-Type'  => 'application/json',

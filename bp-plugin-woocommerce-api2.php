@@ -60,6 +60,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			include_once 'includes/payment-gateways/invoice.php';
 			include_once 'includes/payment-gateways/invoice-b2b.php';
 			include_once 'includes/payment-gateways/apple-pay.php';
+			include_once 'includes/payment-gateways/google-pay.php';
 
 			// Register payment methods
 			add_filter('woocommerce_payment_gateways', array($this, 'add_betterpayment_gateways'));
@@ -106,6 +107,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 			$methods[] = 'BetterPayment_Invoice';
 			$methods[] = 'BetterPayment_Invoice_B2B';
 			$methods[] = 'BetterPayment_Apple_Pay';
+			$methods[] = 'BetterPayment_Google_Pay';
 
 			return $methods;
 		}
@@ -133,6 +135,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 				include_once 'includes/blocks/payments/sepa-direct-debit-b2b.php';
 
 				include_once 'includes/blocks/payments/apple-pay.php';
+				include_once 'includes/blocks/payments/google-pay.php';
 
 				add_action(
 					'woocommerce_blocks_payment_method_type_registration',
@@ -152,6 +155,7 @@ if ( ! class_exists( 'WC_BetterPayment_Plugin' ) ) {
 						$payment_method_registry->register( new BetterPayment_Sepa_Direct_Debit_B2B_Block() );
 
 						$payment_method_registry->register( new BetterPayment_ApplePay_Block() );
+						$payment_method_registry->register( new BetterPayment_GooglePay_Block() );
 					}
 				);
 			}
