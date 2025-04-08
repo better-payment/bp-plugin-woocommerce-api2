@@ -53,7 +53,7 @@ class BetterPayment_Google_Pay extends Abstract_BetterPayment_Gateway {
 					'PAN_ONLY',
 					'CRYPTOGRAM_3DS'
 				],
-				'description' => 'For more info please refer <a target="_blank" href="https://developers.google.com/pay/api/web/reference/request-objects#CardParameters">Google Pay API documentation</a>'
+				'description' => __( 'For more info please refer', 'bp-plugin-woocommerce-api2' ) .' <a target="_blank" href="https://developers.google.com/pay/api/web/reference/request-objects#CardParameters">Google Pay API documentation</a>'
 			],
 			'gateway' => [
 				'title'   => __( 'Gateway', 'bp-plugin-woocommerce-api2' ),
@@ -62,7 +62,7 @@ class BetterPayment_Google_Pay extends Abstract_BetterPayment_Gateway {
 			'gateway_merchant_id' => [
 				'title'   => __( 'Gateway merchant ID', 'bp-plugin-woocommerce-api2' ),
 				'type'    => 'text',
-				'description' => 'More about <a target="_blank" href="https://developers.google.com/pay/api/web/reference/request-objects#PaymentMethodTokenizationSpecifications">Tokenization Specification</a>'
+				'description' => __( 'More about', 'bp-plugin-woocommerce-api2' ) .' <a target="_blank" href="https://developers.google.com/pay/api/web/reference/request-objects#PaymentMethodTokenizationSpecifications">Tokenization Specification</a>'
 			],
 			'merchant_id' => [
 				'title'   => __( 'Merchant ID', 'bp-plugin-woocommerce-api2' ),
@@ -71,7 +71,7 @@ class BetterPayment_Google_Pay extends Abstract_BetterPayment_Gateway {
 			'merchant_name' => [
 				'title'   => __( 'Merchant name', 'bp-plugin-woocommerce-api2' ),
 				'type'    => 'text',
-				'description' => 'More about <a target="_blank" href="https://developers.google.com/pay/api/web/reference/request-objects#MerchantInfo">Merchant Info</a>'
+				'description' => __( 'More about', 'bp-plugin-woocommerce-api2' ) .' <a target="_blank" href="https://developers.google.com/pay/api/web/reference/request-objects#MerchantInfo">Merchant Info</a>'
 			],
 		];
 	}

@@ -50,4 +50,11 @@ class Config_Reader {
 
 		return $settings['environment'] == 'test' ? $settings['testIncomingKey'] : $settings['productionIncomingKey'];
 	}
+
+	public static function get_app_environment(): string
+	{
+		$settings = get_option('woocommerce_betterpayment_settings');
+
+		return $settings['environment'];
+	}
 }

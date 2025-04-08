@@ -81,6 +81,7 @@ final class BetterPayment_GooglePay_Block extends AbstractPaymentMethodType {
 			'gatewayMerchantId' => $this->get_setting( 'gateway_merchant_id' ),
 			'merchantId' => $this->get_setting( 'merchant_id' ),
 			'merchantName' => $this->get_setting( 'merchant_name' ),
+			'environment' => Config_Reader::get_app_environment()  == 'test' ? "TEST" : "PRODUCTION",
 			'initial_data' => [
 				'country' => WC()->countries->get_base_country(),
 				'order_id' => wp_generate_uuid4(),

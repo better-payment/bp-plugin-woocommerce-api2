@@ -2,7 +2,7 @@ const googlePayData = window.wc.wcSettings.getPaymentMethodData(
     "betterpayment_googlepay"
   );
   
-  const {initial_data: initialDataGooglePay, allowedCardNetworks, allowedAuthMethods, gateway, gatewayMerchantId, merchantId, merchantName, paymentUrl} = googlePayData;
+  const {initial_data: initialDataGooglePay, allowedCardNetworks, allowedAuthMethods, gateway, gatewayMerchantId, merchantId, merchantName, paymentUrl, environment} = googlePayData;
   
   const GooglePayBtn = ({onClose, onSubmit, onClick}) => {
     let paymentsClient = null;
@@ -29,7 +29,7 @@ const googlePayData = window.wc.wcSettings.getPaymentMethodData(
           {
             type: "CARD",
             parameters: {
-              allowedAuthMethods: ["PAN_ONLY", "CRYPTOGRAM_3DS"],
+              allowedAuthMethods,
               allowedCardNetworks,
               billingAddressRequired: true,
               billingAddressParameters: {
@@ -168,7 +168,7 @@ const googlePayData = window.wc.wcSettings.getPaymentMethodData(
         script.onload = () => {
           setScriptLoaded(true);
           paymentsClient = new google.payments.api.PaymentsClient({
-            environment: "TEST",
+            environment,
           });
   
           const button = paymentsClient.createButton({
