@@ -26,7 +26,6 @@ final class BetterPayment_GooglePay_Block extends AbstractPaymentMethodType {
 					// If the logic above was successful, we can set the status to success.
 					$order = $context->order;
 					$order->set_transaction_id($context->payment_data['transaction_id']);
-					// $order->update_meta_data('apple_pay_order_id', $context->payment_data['apple_pay_order_id']);
 					$order->save();
 
 					$transaction_status = $context->payment_data['transaction_status'];
@@ -82,6 +81,7 @@ final class BetterPayment_GooglePay_Block extends AbstractPaymentMethodType {
 			'merchantId' => $this->get_setting( 'merchant_id' ),
 			'merchantName' => $this->get_setting( 'merchant_name' ),
 			'environment' => Config_Reader::get_app_environment()  == 'test' ? "TEST" : "PRODUCTION",
+			'locale' => get_locale(),
 			'initial_data' => [
 				'country' => WC()->countries->get_base_country(),
 				'order_id' => wp_generate_uuid4(),
