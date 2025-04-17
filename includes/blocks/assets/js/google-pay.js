@@ -2,6 +2,9 @@ const googlePayData = window.wc.wcSettings.getPaymentMethodData(
   "betterpayment_googlepay"
 );
 
+let transaction_id_gpay = null;
+let transaction_status_gpay = null;
+
 const {
   initial_data: initialDataGooglePay,
   allowedCardNetworks,
@@ -12,11 +15,13 @@ const {
   merchantName,
   paymentUrl,
   environment,
-  locale
+  locale,
 } = googlePayData;
 
 function showNotice(message, type = "error") {
-  const container = document.querySelector(".woocommerce-notices-wrapper") || document.querySelector(".wc-block-components-notices");
+  const container =
+    document.querySelector(".woocommerce-notices-wrapper") ||
+    document.querySelector(".wc-block-components-notices");
 
   if (!container) return;
   // Remove existing notices
@@ -27,13 +32,27 @@ function showNotice(message, type = "error") {
 
   const notice = document.createElement("div");
   notice.className = `wc-block-components-notice-banner is-${type}`;
-  notice.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg><div>'+message+'</div>';
+  notice.innerHTML =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg><div>' +
+    message +
+    "</div>";
   notice.setAttribute("role", "alert");
 
   container.prepend(notice);
 }
 
-const GooglePayBtn = ({onClose, onSubmit, onClick}) => {
+const GooglePayBtn = ({
+  onClose,
+  onSubmit,
+  onClick,
+  eventRegistration,
+  emitResponse,
+  billing,
+  shippingData,
+}) => {
+  const {onPaymentProcessing, onCheckoutValidation} = eventRegistration;
+  const {billingAddress} = billing;
+  const {shippingAddress} = shippingData;
   let paymentsClient = null;
   const {CART_STORE_KEY} = window.wc.wcBlocksData;
   const {data} = window.wp;
@@ -96,7 +115,7 @@ const GooglePayBtn = ({onClose, onSubmit, onClick}) => {
         paymentDataRequest
       );
 
-      const billingAddress =
+      const billingAddressGoogle =
         paymentResponse.paymentMethodData?.info?.billingAddress;
 
       const payload = {
@@ -118,16 +137,16 @@ const GooglePayBtn = ({onClose, onSubmit, onClick}) => {
         app_version: initialDataGooglePay.app_version,
 
         // billing address parameters
-        address: billingAddress?.address1 ?? null,
-        address2: billingAddress?.address2 ?? null,
-        city: billingAddress?.locality ?? null,
-        postal_code: billingAddress?.postalCode ?? null,
-        state: billingAddress?.administrativeArea ?? null,
-        country: billingAddress?.countryCode ?? "DE",
-        first_name: billingAddress?.name ?? null,
-        last_name: billingAddress?.name ?? null,
+        address: billingAddressGoogle?.address1 ?? null,
+        address2: billingAddressGoogle?.address2 ?? null,
+        city: billingAddressGoogle?.locality ?? null,
+        postal_code: billingAddressGoogle?.postalCode ?? null,
+        state: billingAddressGoogle?.administrativeArea ?? null,
+        country: billingAddressGoogle?.countryCode ?? "DE",
+        first_name: billingAddressGoogle?.name ?? null,
+        last_name: billingAddressGoogle?.name ?? null,
         email: paymentResponse.email ?? null,
-        phone: billingAddress?.phoneNumber ?? null,
+        phone: billingAddressGoogle?.phoneNumber ?? null,
 
         // shipping address parameters
         shipping_address: paymentResponse.shippingAddress?.address1 ?? null,
@@ -150,16 +169,68 @@ const GooglePayBtn = ({onClose, onSubmit, onClick}) => {
           "Content-Type": "application/json",
         },
       });
+      
 
-      if (!response.ok) {
-        throw new Error("Server Error");
-      }
-      const data =  await response.json();
+      billingAddress.first_name = billingAddressGoogle?.name ?? null;
+      billingAddress.last_name = billingAddressGoogle?.name ?? null;
+      billingAddress.address_1 = billingAddressGoogle?.address1 ?? null;
+      billingAddress.address_2 = billingAddressGoogle?.address2 ?? null;
+      billingAddress.city = billingAddressGoogle?.locality ?? null;
+      billingAddress.state = billingAddressGoogle?.administrativeArea ?? null;
+      billingAddress.country = billingAddressGoogle?.countryCode ?? "DE";
+      billingAddress.postcode = billingAddressGoogle?.postalCode ?? null;
+      billingAddress.email = paymentResponse.email ?? null;
+      billingAddress.phone = billingAddressGoogle?.phoneNumber ?? null;
 
-      if (data.error_code === 0) {
-        onSubmit();
+      shippingAddress.first_name =
+        paymentResponse.shippingAddress?.name ?? null;
+      shippingAddress.last_name = paymentResponse.shippingAddress?.name ?? null;
+      shippingAddress.address_1 =
+        paymentResponse.shippingAddress?.address1 ?? null;
+      shippingAddress.address_2 =
+        paymentResponse.shippingAddress?.address2 ?? null;
+      shippingAddress.city = paymentResponse.shippingAddress?.locality ?? null;
+      shippingAddress.state =
+        paymentResponse.shippingAddress?.administrativeArea ?? null;
+      shippingAddress.country =
+        paymentResponse.shippingAddress?.countryCode ?? "DE";
+      shippingAddress.postcode =
+        paymentResponse.shippingAddress?.postalCode ?? null;
+      shippingAddress.email = paymentResponse.email ?? null;
+      shippingAddress.phone =
+        paymentResponse.shippingAddress?.phoneNumber ?? null;
+
+
+      if (response.ok) {
+        const data = await response.json();
+
+        if (data.error_code === 0) {
+          transaction_id_gpay = data.transaction_id;
+          transaction_status_gpay = data.status;
+          
+          // WC Function
+          // Submits the checkout and begins processing
+          onSubmit();
+        } else {
+          console.error(
+            "Payment Gateway request failed:",
+            response.status,
+            response.statusText
+          );
+          console.error("Error details:", data);
+
+          onClose();
+        }
       } else {
-        throw new Error("Payment Error");
+        const errorData = await response.json();
+        console.error(
+          "Payment Gateway request failed:",
+          response.status,
+          response.statusText
+        );
+        console.error("Error details:", errorData);
+
+        onClose();
       }
     } catch (err) {
       showNotice(err, "error");
@@ -183,7 +254,27 @@ const GooglePayBtn = ({onClose, onSubmit, onClick}) => {
     } else {
       setScriptLoaded(true);
     }
-  }, []);
+
+    const unsubscribe = onPaymentProcessing(async () => {
+      return {
+        type: emitResponse.responseTypes.SUCCESS,
+        meta: {
+          paymentMethodData: {
+            transaction_id: transaction_id_gpay ?? "",
+            transaction_status: transaction_status_gpay ?? "",
+          },
+        },
+      };
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [
+    emitResponse.responseTypes.ERROR,
+    emitResponse.responseTypes.SUCCESS,
+    onPaymentProcessing,
+  ]);
 
   React.useEffect(() => {
     if (scriptLoaded) {

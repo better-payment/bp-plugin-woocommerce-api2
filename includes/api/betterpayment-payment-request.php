@@ -1,8 +1,5 @@
 <?php
 add_action('rest_api_init', function () {
-	WC()->session = new WC_Session_Handler();
-	WC()->session->init();
-	wc_add_notice( 'You must be logged in to proceed with the checkout.', 'error' );
 	register_rest_route('betterpayment', 'payment', array(
 		'methods' => 'POST',
 		'callback' => 'payment',
