@@ -28,11 +28,11 @@ final class BetterPayment_ApplePay_Block extends AbstractPaymentMethodType {
 				if ( $context->payment_method === $this->name ) {
 					// If the logic above was successful, we can set the status to success.
 					$order = $context->order;
-					$order->set_transaction_id($context->payment_data['transaction_id']);
+					$order->set_transaction_id($context->payment_data['apple_pay_transaction_id']);
 					$order->update_meta_data('apple_pay_order_id', $context->payment_data['apple_pay_order_id']);
 					$order->save();
 
-					$transaction_status = $context->payment_data['transaction_status'];
+					$transaction_status = $context->payment_data['apple_pay_transaction_status'];
 
 					// Map status from Better Payment to WooCommerce
 					if ( $transaction_status == 'completed' ) {
@@ -90,6 +90,7 @@ final class BetterPayment_ApplePay_Block extends AbstractPaymentMethodType {
 				'app_name' => Config_Reader::get_app_name(),
 				'app_version' => Config_Reader::get_app_version(),
 			],
+			'paymentUrl' =>  get_rest_url(null, '/betterpayment/payment')
 		];
 	}
 }

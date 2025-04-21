@@ -25,10 +25,11 @@ final class BetterPayment_GooglePay_Block extends AbstractPaymentMethodType {
 				if ( $context->payment_method === $this->name ) {
 					// If the logic above was successful, we can set the status to success.
 					$order = $context->order;
-					$order->set_transaction_id($context->payment_data['transaction_id']);
+					$order->set_transaction_id($context->payment_data['google_pay_transaction_id']);
+					$order->update_meta_data('google_pay_order_id', $context->payment_data['google_pay_order_id']);
 					$order->save();
 
-					$transaction_status = $context->payment_data['transaction_status'];
+					$transaction_status = $context->payment_data['google_pay_transaction_status'];
 
 					// Map status from Better Payment to WooCommerce
 					if ( $transaction_status == 'completed' ) {
