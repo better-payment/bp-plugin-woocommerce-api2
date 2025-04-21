@@ -204,12 +204,14 @@ const GooglePayBtn = ({
                         response.status,
                         response.statusText
                     );
+                    showNotice("Payment error.", "error");
                     console.error("Error details:", data);
 
                     onClose();
                 }
             } else {
                 const errorData = await response.json();
+                showNotice("Payment error.", "error");
                 console.error(
                     "Payment Gateway request failed:",
                     response.status,
