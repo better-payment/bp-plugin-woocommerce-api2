@@ -199,31 +199,16 @@ const GooglePayBtn = ({
                     // Submits the checkout and begins processing
                     onSubmit();
                 } else {
-                    console.error(
-                        "Payment Gateway request failed:",
-                        response.status,
-                        response.statusText
-                    );
-                    showNotice("Payment error.", "error");
-                    console.error("Error details:", data);
-
                     onClose();
+                    throw new Error()
                 }
             } else {
-                const errorData = await response.json();
-                showNotice("Payment error.", "error");
-                console.error(
-                    "Payment Gateway request failed:",
-                    response.status,
-                    response.statusText
-                );
-                console.error("Error details:", errorData);
-
                 onClose();
+                throw new Error()
             }
         } catch (err) {
-            showNotice(err, "error");
-            console.error("Payment Error: ", err);
+            showNotice("Payment error.", "error");
+            environment !== "PRODUCTION" && console.error("Payment Error: ", err);
             onClose();
         }
     };
