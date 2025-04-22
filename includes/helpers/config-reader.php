@@ -11,7 +11,7 @@ class Config_Reader {
 		global $woocommerce, $wp_version;
 		require_once(ABSPATH . 'wp-admin/includes/plugin.php');
 
-		$plugin_file = ABSPATH . 'wp-content/plugins/bp-plugin-woocommerce-api2/bp-plugin-woocommerce-api2.php';
+		$plugin_file = dirname( __DIR__, 2 ) . '/bp-plugin-woocommerce-api2.php';
 		$plugin_data = get_plugin_data($plugin_file);
 
 		return 'WordPress ' . $wp_version . ', WooCommerce ' . $woocommerce->version . ', Plugin ' . $plugin_data['Version'];
