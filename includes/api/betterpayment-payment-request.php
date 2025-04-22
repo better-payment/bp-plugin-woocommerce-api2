@@ -12,6 +12,13 @@ function payment(WP_REST_Request $request): WP_REST_Response {
 	$url     = Config_Reader::get_api_url() . '/rest/payment';
 	$body    = $request->get_json_params();
 
+	if(!isset($body['googlepay_token']) && !isset($body['applepay_token'])){
+		return new WP_REST_Response([
+            'success' => false,
+            'message' => __('Missing payment token', 'bp-plugin-woocommerce-api2')
+        ], 400);
+	}
+
 	// Add the payment type to the body for only pre-defined
 	$body['payment_type'] = isset($body['googlepay_token']) ? 'googlepay' : 'applepay';
 	$headers = [
