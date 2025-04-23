@@ -1,5 +1,12 @@
 This changelog follows the specifications of https://keepachangelog.com. Please, follow the specs when adding a new entry
 
+## [1.4.0] - 2025-04-23
+
+### Added
+
+- Google Pay as express checkout
+
+
 ## [1.3.1] - 2025-03-06
 
 ### Fixed
