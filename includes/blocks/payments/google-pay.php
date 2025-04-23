@@ -4,16 +4,13 @@ use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodTyp
 use Automattic\WooCommerce\StoreApi\Payments\PaymentContext;
 use Automattic\WooCommerce\StoreApi\Payments\PaymentResult;
 
-final class BetterPayment_ApplePay_Block extends AbstractPaymentMethodType {
-	protected $name = 'betterpayment_applepay';
+final class BetterPayment_GooglePay_Block extends AbstractPaymentMethodType {
+	protected $name = 'betterpayment_googlepay';
 
 	public function initialize() {
 		$this->settings = get_option( 'woocommerce_' . $this->name . '_settings', [] );
 
 		// Bypass postcode and city validations.
-		// Because default woocommerce checkout form requires postcode and city fields being mandatory,
-		// while Apple Pay billing/shipping addresses doesn't require them to be mandatory fields
-		// https://developer.apple.com/documentation/apple_pay_on_the_web/applepaycontactfield
 		add_filter('woocommerce_validate_postcode', '__return_true');
 		add_filter('woocommerce_default_address_fields', function ($fields) {
 			$fields['postcode']['required'] = false;
@@ -28,11 +25,11 @@ final class BetterPayment_ApplePay_Block extends AbstractPaymentMethodType {
 				if ( $context->payment_method === $this->name ) {
 					// If the logic above was successful, we can set the status to success.
 					$order = $context->order;
-					$order->set_transaction_id($context->payment_data['apple_pay_transaction_id']);
-					$order->update_meta_data('apple_pay_order_id', $context->payment_data['apple_pay_order_id']);
+					$order->set_transaction_id($context->payment_data['google_pay_transaction_id']);
+					$order->update_meta_data('google_pay_order_id', $context->payment_data['google_pay_order_id']);
 					$order->save();
 
-					$transaction_status = $context->payment_data['apple_pay_transaction_status'];
+					$transaction_status = $context->payment_data['google_pay_transaction_status'];
 
 					// Map status from Better Payment to WooCommerce
 					if ( $transaction_status == 'completed' ) {
@@ -64,7 +61,7 @@ final class BetterPayment_ApplePay_Block extends AbstractPaymentMethodType {
 	public function get_payment_method_script_handles() {
 		wp_register_script(
 			$this->name . '-blocks-integration',
-			 plugin_dir_url(__DIR__) . 'assets/js/apple-pay.js',
+			plugin_dir_url(__DIR__) . 'assets/js/google-pay.js',
 			[],
 			null,
 			true
@@ -78,8 +75,14 @@ final class BetterPayment_ApplePay_Block extends AbstractPaymentMethodType {
 		return [
 			'title'       => $this->get_setting( 'title' ),
 			'description' => $this->get_setting( 'description' ),
-			'supports3DS' => 'yes' == $this->get_setting( 'supports3DS' ),
-			'supportedNetworks' => $this->get_setting( 'supported_networks' ),
+			'allowedAuthMethods' => $this->get_setting( 'allowed_auth_methods' ),
+			'allowedCardNetworks' => $this->get_setting( 'allowed_card_networks' ),
+			'gateway' => $this->get_setting( 'gateway' ),
+			'gatewayMerchantId' => $this->get_setting( 'gateway_merchant_id' ),
+			'merchantId' => $this->get_setting( 'merchant_id' ),
+			'merchantName' => $this->get_setting( 'merchant_name' ),
+			'environment' => Config_Reader::get_app_environment()  == 'test' ? "TEST" : "PRODUCTION",
+			'locale' => get_locale(),
 			'initial_data' => [
 				'country' => WC()->countries->get_base_country(),
 				'order_id' => wp_generate_uuid4(),

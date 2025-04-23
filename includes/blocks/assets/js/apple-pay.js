@@ -2,8 +2,8 @@ const applePayData = window.wc.wcSettings.getPaymentMethodData('betterpayment_ap
 const initialData = applePayData.initial_data;
 const orderDescription = initialData.shop_name;
 
-let transaction_id = null;
-let transaction_status = null;
+let apple_pay_transaction_id = null;
+let apple_pay_transaction_status = null;
 
 const APPLE_PAY_JS_API_VERSION = 14;
 const REQUIRED_CONTACT_FIELDS = [
@@ -143,21 +143,24 @@ const ApplePayButton = (props) => {
                     shipping_last_name: shippingAddress.last_name,
                 };
 
-                const response = await fetch('/wp-json/betterpayment/payment', {
+                const response = await fetch(applePayData.paymentUrl, {
                     method: 'POST',
                     body: JSON.stringify(payload),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 });
 
                 if (response.ok) {
-                    const data = JSON.parse(await response.json());
+                    const data = await response.json();
 
                     if (data.error_code === 0) {
                         session.completePayment({
                             status: ApplePaySession.STATUS_SUCCESS
                         });
 
-                        transaction_id = data.transaction_id;
-                        transaction_status = data.status;
+                        apple_pay_transaction_id = data.transaction_id;
+                        apple_pay_transaction_status = data.status;
 
                         // WC Function
                         // Submits the checkout and begins processing
@@ -208,8 +211,8 @@ const ApplePayButton = (props) => {
         const style = document.createElement('style');
         style.textContent = `
             apple-pay-button {
-                --apple-pay-button-width: 150px;
-                --apple-pay-button-height: 30px;
+                --apple-pay-button-width: 240px;
+                --apple-pay-button-height: 40px;
                 --apple-pay-button-border-radius: 3px;
                 --apple-pay-button-padding: 0px 0px;
                 --apple-pay-button-box-sizing: border-box;
@@ -223,19 +226,20 @@ const ApplePayButton = (props) => {
             button.addEventListener('click', initApplePay);
         }
 
-        // TODO: Make it specific to Apple Pay
-        // passes following metadata in other checkout payment methods (i.e. Credit Card)
         const unsubscribe = onPaymentProcessing(async () => {
-            return {
-                type: emitResponse.responseTypes.SUCCESS,
-                meta: {
-                    paymentMethodData: {
-                        transaction_id: transaction_id ?? '',
-                        transaction_status: transaction_status ?? '',
-                        apple_pay_order_id: initialData.order_id,
+            // Conditional is used to not pass metadata in other checkout payment methods (i.e. Credit Card, Google Pay)
+            if (apple_pay_transaction_id && apple_pay_transaction_status) {
+                return {
+                    type: emitResponse.responseTypes.SUCCESS,
+                    meta: {
+                        paymentMethodData: {
+                            apple_pay_transaction_id: apple_pay_transaction_id ?? '',
+                            apple_pay_transaction_status: apple_pay_transaction_status ?? '',
+                            apple_pay_order_id: initialData.order_id,
+                        },
                     },
-                },
-            };
+                };
+            }
         });
 
         return () => {
