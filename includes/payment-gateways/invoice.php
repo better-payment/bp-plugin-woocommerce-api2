@@ -73,7 +73,21 @@ class BetterPayment_Invoice extends Abstract_BetterPayment_Gateway {
 				'title'       => __( 'BIC (optional)', 'bp-plugin-woocommerce-api2' ),
 				'type'        => 'text',
 				'description' => __( 'BIC of your company', 'bp-plugin-woocommerce-api2' ),
-			]
+			],
+			'new_order_status' => [
+				'title'       => __( 'New order status', 'bp-plugin-woocommerce-api2' ),
+				'type'        => 'select',
+				'default'     => 'on-hold',
+				'options'     => [
+					'on-hold'   => 'On-hold',
+					'processing' => 'Processing',
+				],
+				'description' => __('Select the status assigned to an order immediately after checkout.<br>
+											<b>On-hold (recommended)</b> indicates the payment is not yet confirmed.<br>
+											Changing this to <b>Processing</b> should be done with <b>caution</b>, as it assumes the payment is already completed and may trigger order fulfillment actions prematurely.',
+					'bp-plugin-woocommerce-api2'
+				),
+			],
 		];
 	}
 

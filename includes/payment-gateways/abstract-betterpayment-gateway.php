@@ -1,5 +1,7 @@
 <?php
 
+use Automattic\WooCommerce\Enums\OrderStatus;
+
 if (class_exists('WC_Payment_Gateway')) {
 	abstract class Abstract_BetterPayment_Gateway extends WC_Payment_Gateway {
 		public $supports = ['refunds'];
@@ -50,10 +52,10 @@ if (class_exists('WC_Payment_Gateway')) {
 						$order->payment_complete();
 					} else {
 						$status = match ( $transaction_status ) {
-							'started', 'pending' => 'on-hold',
-							'error', 'declined', 'canceled' => 'failed',
-							'refunded', 'chargeback' => 'refunded',
-							default => 'pending-payment',
+							'started', 'pending' => OrderStatus::ON_HOLD,
+							'error', 'declined', 'canceled' => OrderStatus::FAILED,
+							'refunded', 'chargeback' => OrderStatus::REFUNDED,
+							default => OrderStatus::PENDING,
 						};
 
 						$order->update_status( $status, 'Status updated from Payment Gateway.' );
@@ -64,7 +66,7 @@ if (class_exists('WC_Payment_Gateway')) {
 						'redirect' => $responseBody['action_data']['url'] ?? $this->get_return_url( $order )
 					];
 				} else {
-					$order->update_status( 'failed', $responseBody['error_message'] );
+					$order->update_status( OrderStatus::FAILED, $responseBody['error_message'] );
 					wc_add_notice( $responseBody['error_message'], 'error' );
 
 					return [
@@ -73,7 +75,7 @@ if (class_exists('WC_Payment_Gateway')) {
 					];
 				}
 			} else {
-				$order->update_status( 'failed', 'Payment failed.' );
+				$order->update_status( OrderStatus::FAILED, 'Payment failed.' );
 				wc_add_notice( 'Connection error.', 'error' );
 
 				return [
@@ -282,22 +284,28 @@ if (class_exists('WC_Payment_Gateway')) {
 							$order->payment_complete();
 						}
 						else {
+							$newOrderStatus = null;
+							if ($responseBody['payment_method'] == 'kar') {
+								$newOrderStatus = get_option( 'woocommerce_betterpayment_kar_settings' )['new_order_status'];
+							}
+
 							$status = match ($transaction_status) {
-								'started', 'pending' => 'on-hold',
-								'error', 'declined', 'canceled' => 'failed',
-								'refunded', 'chargeback' => 'refunded',
-								default => 'pending-payment',
+								'started', => OrderStatus::ON_HOLD,
+								'pending' => $newOrderStatus ?? OrderStatus::ON_HOLD,
+								'error', 'declined', 'canceled' => OrderStatus::FAILED,
+								'refunded', 'chargeback' => OrderStatus::REFUNDED,
+								default => OrderStatus::PENDING,
 							};
 
 							$order->update_status($status, 'Status updated from Payment Gateway.');
 						}
 					}
 					else {
-						$order->update_status('failed', $responseBody['error_message']);
+						$order->update_status(OrderStatus::FAILED, $responseBody['error_message']);
 						wc_add_notice($responseBody['error_message'], 'error');
 					}
 				} else {
-					$order->update_status('failed', 'Payment failed.');
+					$order->update_status(OrderStatus::FAILED, 'Payment failed.');
 					wc_add_notice( 'Connection error.', 'error' );
 				}
 			}
