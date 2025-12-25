@@ -1,5 +1,12 @@
 This changelog follows the specifications of https://keepachangelog.com. Please, follow the specs when adding a new entry
 
+## [1.4.1] - 2025-12-22
+
+### Added
+
+- Support for new order status mapping (on-hold, processing) for invoice payment method
+
+
 ## [1.4.0] - 2025-04-23
 
 ### Added
